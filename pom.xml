@@ -12,7 +12,7 @@
     <artifactId>green-habits</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>green-habits</name>
-    <description>Eco lifestyle tracker</description>
+    <description>Eco lifestyle tracker(bachelor's thesis)</description>
 
     <properties>
         <java.version>1.8</java.version>
