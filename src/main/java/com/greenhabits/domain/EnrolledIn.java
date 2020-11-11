@@ -3,6 +3,7 @@ package com.greenhabits.domain;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @RelationshipEntity(type = "ENROLLED_IN")
 public class EnrolledIn {
@@ -11,10 +12,10 @@ public class EnrolledIn {
     private Long id;
 
     @Property(value = "started_at")
-    private LocalDate startedAt;
+    private Date startedAt;
 
     @Property(value = "ended_at")
-    private LocalDate endedAt;
+    private Date endedAt;
 
     @StartNode
     private GreenScout greenScout;
@@ -25,24 +26,26 @@ public class EnrolledIn {
     public EnrolledIn() {
     }
 
-    public EnrolledIn(LocalDate startedAt, LocalDate endedAt) {
+    public EnrolledIn(Date startedAt, GreenScout greenScout, Challenge challenge) {
         this.startedAt = startedAt;
         this.endedAt = null;
+        this.greenScout = greenScout;
+        this.challenge = challenge;
     }
 
-    public LocalDate getStartedAt() {
+    public Date getStartedAt() {
         return startedAt;
     }
 
-    public void setStartedAt(LocalDate startedAt) {
+    public void setStartedAt(Date startedAt) {
         this.startedAt = startedAt;
     }
 
-    public LocalDate getEndedAt() {
+    public Date getEndedAt() {
         return endedAt;
     }
 
-    public void setEndedAt(LocalDate endedAt) {
+    public void setEndedAt(Date endedAt) {
         this.endedAt = endedAt;
     }
 

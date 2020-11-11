@@ -1,8 +1,11 @@
 package com.greenhabits.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
@@ -18,15 +21,16 @@ public class GreenScout {
     private String email;
 
     @Property(value = "created_at")
-    private LocalDate createdAt;
+    private Date createdAt;
 
     public GreenScout() {
     }
 
-    public GreenScout(String name, String email, LocalDate createdAt) {
+    public GreenScout(String name, String email, Date createdAt) {
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
+        this.challenges = new HashSet<>();
     }
 
     @Relationship(type = "ENROLLED_IN",direction = Relationship.OUTGOING)
@@ -49,12 +53,21 @@ public class GreenScout {
         this.email = email;
     }
 
-    public LocalDate getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @JsonIgnore
+    public Set<Challenge> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(Set<Challenge> challenges) {
+        this.challenges = challenges;
     }
 
     @Override

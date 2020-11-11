@@ -1,7 +1,9 @@
 package com.greenhabits.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
@@ -21,6 +23,7 @@ public class Challenge {
 
     public Challenge(String title) {
         this.title = title;
+        this.greenScouts = new HashSet<>();
     }
 
     public String getTitle() {
@@ -29,6 +32,15 @@ public class Challenge {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @JsonIgnore
+    public Set<GreenScout> getGreenScouts() {
+        return greenScouts;
+    }
+
+    public void setGreenScouts(Set<GreenScout> greenScouts) {
+        this.greenScouts = greenScouts;
     }
 
     @Override
