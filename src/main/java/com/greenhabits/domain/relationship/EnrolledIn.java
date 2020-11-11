@@ -1,8 +1,9 @@
-package com.greenhabits.domain;
+package com.greenhabits.domain.relationship;
 
+import com.greenhabits.domain.node.Challenge;
+import com.greenhabits.domain.node.GreenScout;
 import org.neo4j.ogm.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @RelationshipEntity(type = "ENROLLED_IN")
@@ -33,6 +34,10 @@ public class EnrolledIn {
         this.challenge = challenge;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Date getStartedAt() {
         return startedAt;
     }
@@ -47,6 +52,22 @@ public class EnrolledIn {
 
     public void setEndedAt(Date endedAt) {
         this.endedAt = endedAt;
+    }
+
+    public GreenScout getGreenScout() {
+        return greenScout;
+    }
+
+    public void setGreenScout(GreenScout greenScout) {
+        this.greenScout = greenScout;
+    }
+
+    public Challenge getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(Challenge challenge) {
+        this.challenge = challenge;
     }
 
     @Override

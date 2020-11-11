@@ -1,4 +1,4 @@
-package com.greenhabits.domain;
+package com.greenhabits.domain.node;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@NodeEntity
+@NodeEntity(label = "Challenge")
 public class Challenge {
     @Id
     @GeneratedValue
@@ -15,7 +15,8 @@ public class Challenge {
     @Property(value = "title")
     private String title;
 
-    @Relationship(type = "ENROLLED_IN", direction = Relationship.INCOMING)
+//    @Relationship(type = "ENROLLED_IN", direction = Relationship.INCOMING)
+//    @Relationship(type = "ENROLLED_IN")
     private Set<GreenScout> greenScouts;
 
     public Challenge() {
@@ -24,6 +25,10 @@ public class Challenge {
     public Challenge(String title) {
         this.title = title;
         this.greenScouts = new HashSet<>();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTitle() {

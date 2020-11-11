@@ -1,6 +1,6 @@
 package com.greenhabits.service;
 
-import com.greenhabits.domain.Challenge;
+import com.greenhabits.domain.node.Challenge;
 import com.greenhabits.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

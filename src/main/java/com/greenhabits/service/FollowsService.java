@@ -1,23 +1,23 @@
 package com.greenhabits.service;
 
 import com.greenhabits.domain.node.GreenScout;
-import com.greenhabits.repository.GreenScoutRepository;
+import com.greenhabits.domain.relationship.Follows;
+import com.greenhabits.repository.FollowsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class GreenScoutService {
+public class FollowsService {
     @Autowired
-    private GreenScoutRepository repository;
+    private FollowsRepository repository;
 
-    public List<GreenScout> getAll(){
+    public List<Follows> getAll() {
         return repository.findAll();
     }
 
-    public void create(GreenScout greenScout){
-        repository.save(greenScout);
+    public void create(Follows follow) {
+        repository.save(follow);
     }
-
 }

@@ -1,14 +1,16 @@
-package com.greenhabits.domain;
+package com.greenhabits.domain.node;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.neo4j.ogm.annotation.*;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@NodeEntity
+@NodeEntity(label = "GreenScout")
 public class GreenScout {
     @Id
     @GeneratedValue
@@ -33,9 +35,13 @@ public class GreenScout {
         this.challenges = new HashSet<>();
     }
 
-    @Relationship(type = "ENROLLED_IN",direction = Relationship.OUTGOING)
+//    @Relationship(type = "ENROLLED_IN",direction = Relationship.OUTGOING)
+//    @Relationship(type = "ENROLLED_IN")
     private Set<Challenge> challenges;
 
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
