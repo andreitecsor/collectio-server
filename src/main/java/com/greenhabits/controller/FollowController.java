@@ -1,7 +1,7 @@
 package com.greenhabits.controller;
 
-import com.greenhabits.domain.relationship.EnrolledIn;
-import com.greenhabits.service.EnrolledInService;
+import com.greenhabits.domain.relationship.Follow;
+import com.greenhabits.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("enrolled")
-public class EnrolledInController {
+@RequestMapping("r/follow")
+public class FollowController {
     @Autowired
-    private final EnrolledInService service;
+    private final FollowService service;
 
-    public EnrolledInController(EnrolledInService service) {
+    public FollowController(FollowService service) {
         this.service = service;
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<EnrolledIn>> getAll(){
-        List<EnrolledIn> result = service.getAll();
-        if(result == null || result.isEmpty()){
+    public ResponseEntity<List<Follow>> getAll() {
+        List<Follow> result = service.getAll();
+        if (result == null || result.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().body(result);

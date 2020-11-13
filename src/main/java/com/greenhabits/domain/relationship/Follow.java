@@ -1,12 +1,12 @@
 package com.greenhabits.domain.relationship;
 
-import com.greenhabits.domain.node.GreenScout;
+import com.greenhabits.domain.node.AppUser;
 import org.neo4j.ogm.annotation.*;
 
 import java.util.Date;
 
 @RelationshipEntity(type = "FOLLOWS")
-public class Follows {
+public class Follow {
     @Id
     @GeneratedValue
     private Long id;
@@ -18,15 +18,15 @@ public class Follows {
     private Date endedAt;
 
     @StartNode
-    private GreenScout follower;
+    private AppUser follower;
 
     @EndNode
-    private GreenScout following;
+    private AppUser following;
 
-    public Follows() {
+    public Follow() {
     }
 
-    public Follows(Date startedAt, GreenScout follower, GreenScout following) {
+    public Follow(Date startedAt, AppUser follower, AppUser following) {
         this.startedAt = startedAt;
         this.endedAt = null;
         this.follower = follower;
@@ -53,19 +53,19 @@ public class Follows {
         this.endedAt = endedAt;
     }
 
-    public GreenScout getFollower() {
+    public AppUser getFollower() {
         return follower;
     }
 
-    public void setFollower(GreenScout follower) {
+    public void setFollower(AppUser follower) {
         this.follower = follower;
     }
 
-    public GreenScout getFollowing() {
+    public AppUser getFollowing() {
         return following;
     }
 
-    public void setFollowing(GreenScout following) {
+    public void setFollowing(AppUser following) {
         this.following = following;
     }
 }

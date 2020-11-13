@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity(label = "GreenScout")
-public class GreenScout {
+public class AppUser {
     @Id
     @GeneratedValue
     private Long id;
@@ -25,10 +25,10 @@ public class GreenScout {
     @Property(value = "created_at")
     private Date createdAt;
 
-    public GreenScout() {
+    public AppUser() {
     }
 
-    public GreenScout(String name, String email, Date createdAt) {
+    public AppUser(String name, String email, Date createdAt) {
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
@@ -81,7 +81,7 @@ public class GreenScout {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GreenScout that = (GreenScout) o;
+        AppUser that = (AppUser) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

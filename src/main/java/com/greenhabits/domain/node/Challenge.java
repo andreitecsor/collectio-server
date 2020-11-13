@@ -17,14 +17,14 @@ public class Challenge {
 
 //    @Relationship(type = "ENROLLED_IN", direction = Relationship.INCOMING)
 //    @Relationship(type = "ENROLLED_IN")
-    private Set<GreenScout> greenScouts;
+    private Set<AppUser> appUsers;
 
     public Challenge() {
     }
 
     public Challenge(String title) {
         this.title = title;
-        this.greenScouts = new HashSet<>();
+        this.appUsers = new HashSet<>();
     }
 
     public Long getId() {
@@ -40,12 +40,12 @@ public class Challenge {
     }
 
     @JsonIgnore
-    public Set<GreenScout> getGreenScouts() {
-        return greenScouts;
+    public Set<AppUser> getGreenScouts() {
+        return appUsers;
     }
 
-    public void setGreenScouts(Set<GreenScout> greenScouts) {
-        this.greenScouts = greenScouts;
+    public void setGreenScouts(Set<AppUser> appUsers) {
+        this.appUsers = appUsers;
     }
 
     @Override
@@ -57,14 +57,14 @@ public class Challenge {
 
         if (id != null ? !id.equals(challenge.id) : challenge.id != null) return false;
         if (title != null ? !title.equals(challenge.title) : challenge.title != null) return false;
-        return greenScouts != null ? greenScouts.equals(challenge.greenScouts) : challenge.greenScouts == null;
+        return appUsers != null ? appUsers.equals(challenge.appUsers) : challenge.appUsers == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (greenScouts != null ? greenScouts.hashCode() : 0);
+        result = 31 * result + (appUsers != null ? appUsers.hashCode() : 0);
         return result;
     }
 

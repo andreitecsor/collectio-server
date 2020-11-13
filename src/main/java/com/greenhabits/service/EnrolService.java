@@ -1,22 +1,22 @@
 package com.greenhabits.service;
 
-import com.greenhabits.domain.relationship.EnrolledIn;
-import com.greenhabits.repository.EnrolledInRepository;
+import com.greenhabits.domain.relationship.Enrol;
+import com.greenhabits.repository.EnrolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EnrolledInService {
+public class EnrolService {
     @Autowired
-    private EnrolledInRepository repository;
+    private EnrolRepository repository;
 
-    public List<EnrolledIn> getAll() {
+    public List<Enrol> getAll() {
         return repository.findAll();
     }
 
-    public void create(EnrolledIn enrolled) {
+    public void create(Enrol enrolled) {
         repository.save(enrolled);
     }
 }
