@@ -46,7 +46,6 @@ public class AppUserService {
         userToUpdate.setName(user.getName());
         userToUpdate.setCreatedAt(user.getCreatedAt());
         userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setChallenges(user.getChallenges());
         return repository.save(userToUpdate);
     }
 

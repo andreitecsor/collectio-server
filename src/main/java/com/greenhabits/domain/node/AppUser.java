@@ -1,14 +1,11 @@
 package com.greenhabits.domain.node;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @NodeEntity(label = "AppUser")
 public class AppUser {
@@ -32,12 +29,7 @@ public class AppUser {
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
-        this.challenges = new HashSet<>();
     }
-
-//    @Relationship(type = "ENROLLED_IN",direction = Relationship.OUTGOING)
-//    @Relationship(type = "ENROLLED_IN")
-    private Set<Challenge> challenges;
 
     public Long getId() {
         return id;
@@ -65,15 +57,6 @@ public class AppUser {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    @JsonIgnore
-    public Set<Challenge> getChallenges() {
-        return challenges;
-    }
-
-    public void setChallenges(Set<Challenge> challenges) {
-        this.challenges = challenges;
     }
 
     @Override

@@ -1,10 +1,9 @@
 package com.greenhabits.domain.node;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.neo4j.ogm.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 @NodeEntity(label = "Challenge")
 public class Challenge {
@@ -15,16 +14,11 @@ public class Challenge {
     @Property(value = "title")
     private String title;
 
-//    @Relationship(type = "ENROLLED_IN", direction = Relationship.INCOMING)
-//    @Relationship(type = "ENROLLED_IN")
-    private Set<AppUser> appUsers;
-
     public Challenge() {
     }
 
     public Challenge(String title) {
         this.title = title;
-        this.appUsers = new HashSet<>();
     }
 
     public Long getId() {
@@ -39,15 +33,6 @@ public class Challenge {
         this.title = title;
     }
 
-    @JsonIgnore
-    public Set<AppUser> getAppUsers() {
-        return appUsers;
-    }
-
-    public void setAppUsers(Set<AppUser> appUsers) {
-        this.appUsers = appUsers;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,15 +41,13 @@ public class Challenge {
         Challenge challenge = (Challenge) o;
 
         if (id != null ? !id.equals(challenge.id) : challenge.id != null) return false;
-        if (title != null ? !title.equals(challenge.title) : challenge.title != null) return false;
-        return appUsers != null ? appUsers.equals(challenge.appUsers) : challenge.appUsers == null;
+        return title != null ? title.equals(challenge.title) : challenge.title == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (title != null ? title.hashCode() : 0);
-        result = 31 * result + (appUsers != null ? appUsers.hashCode() : 0);
         return result;
     }
 

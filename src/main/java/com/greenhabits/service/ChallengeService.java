@@ -44,7 +44,6 @@ public class ChallengeService {
         Challenge challengeToUpdate = persistedChallenge.get();
 
         challengeToUpdate.setTitle(challenge.getTitle());
-        challengeToUpdate.setAppUsers(challenge.getAppUsers());
         return repository.save(challengeToUpdate);
     }
 
