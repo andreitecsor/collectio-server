@@ -40,11 +40,11 @@ public class Challenge {
     }
 
     @JsonIgnore
-    public Set<AppUser> getGreenScouts() {
+    public Set<AppUser> getAppUsers() {
         return appUsers;
     }
 
-    public void setGreenScouts(Set<AppUser> appUsers) {
+    public void setAppUsers(Set<AppUser> appUsers) {
         this.appUsers = appUsers;
     }
 

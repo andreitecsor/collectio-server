@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@NodeEntity(label = "GreenScout")
+@NodeEntity(label = "AppUser")
 public class AppUser {
     @Id
     @GeneratedValue
@@ -100,7 +100,7 @@ public class AppUser {
 
     @Override
     public String toString() {
-        return "GreenScout{" +
+        return "AppUser{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

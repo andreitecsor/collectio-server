@@ -1,7 +1,7 @@
 package com.greenhabits.controller;
 
-import com.greenhabits.domain.node.AppUser;
-import com.greenhabits.service.AppUserService;
+import com.greenhabits.domain.node.Challenge;
+import com.greenhabits.service.ChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,27 +9,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("n/user")
-public class AppUserController {
+@RequestMapping("n/challenge")
+public class ChallengeController {
     @Autowired
-    final private AppUserService service;
+    final private ChallengeService service;
 
-    public AppUserController(AppUserService service) {
+    public ChallengeController(ChallengeService service) {
         this.service = service;
     }
 
+
     @PostMapping("/add")
-    public ResponseEntity<AppUser> add(@RequestBody AppUser userToAdd) {
-        AppUser newUser = service.create(userToAdd);
-        if (newUser == null) {
+    public ResponseEntity<Challenge> add(@RequestBody Challenge challengeToAdd) {
+        Challenge newChallenge = service.create(challengeToAdd);
+        if (newChallenge == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body(newUser);
+        return ResponseEntity.ok().body(newChallenge);
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<List<AppUser>> getAll() {
-        List<AppUser> result = service.getAll();
+    public ResponseEntity<List<Challenge>> getAll() {
+        List<Challenge> result = service.getAll();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -37,8 +38,8 @@ public class AppUserController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<AppUser> getById(@PathVariable Long id) {
-        AppUser result = service.getById(id);
+    public ResponseEntity<Challenge> getById(@PathVariable Long id) {
+        Challenge result = service.getById(id);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -46,8 +47,8 @@ public class AppUserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<AppUser> update(@RequestBody AppUser updatedUser) {
-        AppUser result = service.update(updatedUser);
+    public ResponseEntity<Challenge> update(@RequestBody Challenge updatedChallenge) {
+        Challenge result = service.update(updatedChallenge);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -55,8 +56,8 @@ public class AppUserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<AppUser> deleteById(@PathVariable Long id) {
-        AppUser result = service.delete(id);
+    public ResponseEntity<Challenge> deleteById(@PathVariable Long id) {
+        Challenge result = service.delete(id);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }

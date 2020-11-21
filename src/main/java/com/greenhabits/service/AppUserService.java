@@ -55,9 +55,9 @@ public class AppUserService {
         if (!persistedUser.isPresent()) {
             return null;
         }
-        AppUser deletedUser = persistedUser.get();
+        AppUser deleted = persistedUser.get();
         repository.deleteById(id);
-        return deletedUser;
+        return deleted;
     }
 
 
