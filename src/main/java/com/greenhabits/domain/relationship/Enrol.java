@@ -54,11 +54,11 @@ public class Enrol {
         this.endedAt = endedAt;
     }
 
-    public AppUser getGreenScout() {
+    public AppUser getAppUser() {
         return appUser;
     }
 
-    public void setGreenScout(AppUser appUser) {
+    public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
     }
 
@@ -100,7 +100,7 @@ public class Enrol {
                 "id=" + id +
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
-                ", greenScout=" + appUser +
+                ", appUser=" + appUser +
                 ", challenge=" + challenge +
                 '}';
     }

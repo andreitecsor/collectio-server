@@ -68,4 +68,39 @@ public class Follow {
     public void setFollowing(AppUser following) {
         this.following = following;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Follow follow = (Follow) o;
+
+        if (id != null ? !id.equals(follow.id) : follow.id != null) return false;
+        if (startedAt != null ? !startedAt.equals(follow.startedAt) : follow.startedAt != null) return false;
+        if (endedAt != null ? !endedAt.equals(follow.endedAt) : follow.endedAt != null) return false;
+        if (follower != null ? !follower.equals(follow.follower) : follow.follower != null) return false;
+        return following != null ? following.equals(follow.following) : follow.following == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (startedAt != null ? startedAt.hashCode() : 0);
+        result = 31 * result + (endedAt != null ? endedAt.hashCode() : 0);
+        result = 31 * result + (follower != null ? follower.hashCode() : 0);
+        result = 31 * result + (following != null ? following.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Follow{" +
+                "id=" + id +
+                ", startedAt=" + startedAt +
+                ", endedAt=" + endedAt +
+                ", follower=" + follower +
+                ", following=" + following +
+                '}';
+    }
 }
