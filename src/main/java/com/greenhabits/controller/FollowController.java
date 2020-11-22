@@ -1,6 +1,5 @@
 package com.greenhabits.controller;
 
-import com.greenhabits.domain.relationship.Enrol;
 import com.greenhabits.domain.relationship.Follow;
 import com.greenhabits.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;

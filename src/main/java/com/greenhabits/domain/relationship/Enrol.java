@@ -1,7 +1,7 @@
 package com.greenhabits.domain.relationship;
 
-import com.greenhabits.domain.node.Challenge;
 import com.greenhabits.domain.node.AppUser;
+import com.greenhabits.domain.node.Challenge;
 import org.neo4j.ogm.annotation.*;
 
 import java.util.Date;

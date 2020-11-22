@@ -1,8 +1,6 @@
 package com.greenhabits.service;
 
 import com.greenhabits.domain.node.AppUser;
-import com.greenhabits.domain.node.Challenge;
-import com.greenhabits.domain.relationship.Enrol;
 import com.greenhabits.domain.relationship.Follow;
 import com.greenhabits.repository.FollowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
