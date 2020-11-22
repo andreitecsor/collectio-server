@@ -18,19 +18,19 @@ public class Follow {
     private Date endedAt;
 
     @StartNode
-    private AppUser follower;
+    private AppUser whoFollows;
 
     @EndNode
-    private AppUser following;
+    private AppUser whoIsFollowed;
 
     public Follow() {
     }
 
-    public Follow(Date startedAt, AppUser follower, AppUser following) {
+    public Follow(Date startedAt, AppUser whoFollows, AppUser whoIsFollowed) {
         this.startedAt = startedAt;
         this.endedAt = null;
-        this.follower = follower;
-        this.following = following;
+        this.whoFollows = whoFollows;
+        this.whoIsFollowed = whoIsFollowed;
     }
 
     public Long getId() {
@@ -53,20 +53,20 @@ public class Follow {
         this.endedAt = endedAt;
     }
 
-    public AppUser getFollower() {
-        return follower;
+    public AppUser getWhoFollows() {
+        return whoFollows;
     }
 
-    public void setFollower(AppUser follower) {
-        this.follower = follower;
+    public void setWhoFollows(AppUser whoFollows) {
+        this.whoFollows = whoFollows;
     }
 
-    public AppUser getFollowing() {
-        return following;
+    public AppUser getWhoIsFollowed() {
+        return whoIsFollowed;
     }
 
-    public void setFollowing(AppUser following) {
-        this.following = following;
+    public void setWhoIsFollowed(AppUser whoIsFollowed) {
+        this.whoIsFollowed = whoIsFollowed;
     }
 
     @Override
@@ -79,8 +79,8 @@ public class Follow {
         if (id != null ? !id.equals(follow.id) : follow.id != null) return false;
         if (startedAt != null ? !startedAt.equals(follow.startedAt) : follow.startedAt != null) return false;
         if (endedAt != null ? !endedAt.equals(follow.endedAt) : follow.endedAt != null) return false;
-        if (follower != null ? !follower.equals(follow.follower) : follow.follower != null) return false;
-        return following != null ? following.equals(follow.following) : follow.following == null;
+        if (whoFollows != null ? !whoFollows.equals(follow.whoFollows) : follow.whoFollows != null) return false;
+        return whoIsFollowed != null ? whoIsFollowed.equals(follow.whoIsFollowed) : follow.whoIsFollowed == null;
     }
 
     @Override
@@ -88,8 +88,8 @@ public class Follow {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (startedAt != null ? startedAt.hashCode() : 0);
         result = 31 * result + (endedAt != null ? endedAt.hashCode() : 0);
-        result = 31 * result + (follower != null ? follower.hashCode() : 0);
-        result = 31 * result + (following != null ? following.hashCode() : 0);
+        result = 31 * result + (whoFollows != null ? whoFollows.hashCode() : 0);
+        result = 31 * result + (whoIsFollowed != null ? whoIsFollowed.hashCode() : 0);
         return result;
     }
 
@@ -99,8 +99,8 @@ public class Follow {
                 "id=" + id +
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
-                ", follower=" + follower +
-                ", following=" + following +
+                ", follower=" + whoFollows +
+                ", following=" + whoIsFollowed +
                 '}';
     }
 }
