@@ -4,7 +4,6 @@ import com.greenhabits.domain.node.AppUser;
 import com.greenhabits.domain.node.Challenge;
 import com.greenhabits.domain.relationship.Enrol;
 import com.greenhabits.repository.EnrolRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,12 +12,15 @@ import java.util.Optional;
 
 @Service
 public class EnrolService {
-    @Autowired
-    private EnrolRepository repository;
-    @Autowired
-    private AppUserService appUserService;
-    @Autowired
-    private ChallengeService challengeService;
+    private final EnrolRepository repository;
+    private final AppUserService appUserService;
+    private final ChallengeService challengeService;
+
+    public EnrolService(EnrolRepository repository, AppUserService appUserService, ChallengeService challengeService) {
+        this.repository = repository;
+        this.appUserService = appUserService;
+        this.challengeService = challengeService;
+    }
 
     public Enrol create(Long idAppUser, Long idChallenge) {
         Date now = new Date();
@@ -38,10 +40,7 @@ public class EnrolService {
 
     public Enrol getById(Long id) {
         Optional<Enrol> result = repository.findById(id);
-        if (!result.isPresent()) {
-            return null;
-        }
-        return result.get();
+        return result.orElse(null);
     }
 
     public Enrol update(Enrol enrol) {

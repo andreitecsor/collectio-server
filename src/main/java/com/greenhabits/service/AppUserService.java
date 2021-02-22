@@ -2,7 +2,6 @@ package com.greenhabits.service;
 
 import com.greenhabits.domain.node.AppUser;
 import com.greenhabits.repository.AppUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +9,11 @@ import java.util.Optional;
 
 @Service
 public class AppUserService {
-    @Autowired
-    private AppUserRepository repository;
+    private final AppUserRepository repository;
+
+    public AppUserService(AppUserRepository repository) {
+        this.repository = repository;
+    }
 
     public AppUser create(AppUser appUser) {
         if (appUser == null) {
@@ -26,10 +28,7 @@ public class AppUserService {
 
     public AppUser getById(Long id) {
         Optional<AppUser> result = repository.findById(id);
-        if (!result.isPresent()) {
-            return null;
-        }
-        return result.get();
+        return result.orElse(null);
     }
 
     public AppUser update(AppUser user) {

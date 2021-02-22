@@ -2,7 +2,6 @@ package com.greenhabits.controller;
 
 import com.greenhabits.domain.relationship.Follow;
 import com.greenhabits.service.FollowService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("r/follow")
 public class FollowController {
-    @Autowired
     private final FollowService service;
 
     public FollowController(FollowService service) {

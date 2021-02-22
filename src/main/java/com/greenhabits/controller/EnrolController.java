@@ -2,7 +2,6 @@ package com.greenhabits.controller;
 
 import com.greenhabits.domain.relationship.Enrol;
 import com.greenhabits.service.EnrolService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("r/enrol")
 public class EnrolController {
-    @Autowired
     private final EnrolService service;
 
     public EnrolController(EnrolService service) {

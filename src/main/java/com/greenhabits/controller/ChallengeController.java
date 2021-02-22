@@ -2,7 +2,6 @@ package com.greenhabits.controller;
 
 import com.greenhabits.domain.node.Challenge;
 import com.greenhabits.service.ChallengeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("n/challenge")
 public class ChallengeController {
-    @Autowired
     final private ChallengeService service;
 
     public ChallengeController(ChallengeService service) {

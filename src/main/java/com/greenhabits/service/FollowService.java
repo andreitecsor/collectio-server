@@ -3,7 +3,6 @@ package com.greenhabits.service;
 import com.greenhabits.domain.node.AppUser;
 import com.greenhabits.domain.relationship.Follow;
 import com.greenhabits.repository.FollowRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -12,10 +11,13 @@ import java.util.Optional;
 
 @Service
 public class FollowService {
-    @Autowired
-    private FollowRepository repository;
-    @Autowired
-    private AppUserService appUserService;
+    private final FollowRepository repository;
+    private final AppUserService appUserService;
+
+    public FollowService(FollowRepository repository, AppUserService appUserService) {
+        this.repository = repository;
+        this.appUserService = appUserService;
+    }
 
     public Follow create(Long idWhoFollows, Long idWhoIsFollowed) {
         Date now = new Date();
@@ -32,10 +34,7 @@ public class FollowService {
 
     public Follow getById(Long id) {
         Optional<Follow> result = repository.findById(id);
-        if (!result.isPresent()) {
-            return null;
-        }
-        return result.get();
+        return result.orElse(null);
     }
 
     public List<Follow> getAll() {

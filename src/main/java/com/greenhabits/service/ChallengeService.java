@@ -2,7 +2,6 @@ package com.greenhabits.service;
 
 import com.greenhabits.domain.node.Challenge;
 import com.greenhabits.repository.ChallengeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +9,11 @@ import java.util.Optional;
 
 @Service
 public class ChallengeService {
-    @Autowired
-    private ChallengeRepository repository;
+    private final ChallengeRepository repository;
+
+    public ChallengeService(ChallengeRepository repository) {
+        this.repository = repository;
+    }
 
     public Challenge create(Challenge challenge) {
         if (challenge == null) {
@@ -26,10 +28,7 @@ public class ChallengeService {
 
     public Challenge getById(Long id) {
         Optional<Challenge> result = repository.findById(id);
-        if (!result.isPresent()) {
-            return null;
-        }
-        return result.get();
+        return result.orElse(null);
     }
 
     public Challenge update(Challenge challenge) {
