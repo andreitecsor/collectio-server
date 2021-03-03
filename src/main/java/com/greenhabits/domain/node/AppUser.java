@@ -5,6 +5,7 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NodeEntity(label = "AppUser")
@@ -19,13 +20,13 @@ public class AppUser {
     @Property(value = "email")
     private String email;
 
-    @Property(value = "created_at")
-    private Date createdAt;
+    @Property(value = "createdAt")
+    private LocalDateTime createdAt;
 
     public AppUser() {
     }
 
-    public AppUser(String name, String email, Date createdAt) {
+    public AppUser(String name, String email, LocalDateTime createdAt) {
         this.name = name;
         this.email = email;
         this.createdAt = createdAt;
@@ -51,11 +52,11 @@ public class AppUser {
         this.email = email;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

@@ -5,6 +5,7 @@ import com.greenhabits.domain.relationship.Follow;
 import com.greenhabits.repository.FollowRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,6 @@ public class FollowService {
     }
 
     public Follow create(Long idWhoFollows, Long idWhoIsFollowed) {
-        Date now = new Date();
-
         AppUser whoFollows = appUserService.getById(idWhoFollows);
         AppUser whoIsFollowed = appUserService.getById(idWhoIsFollowed);
 
@@ -29,7 +28,7 @@ public class FollowService {
             return null;
         }
 
-        return repository.save(new Follow(now, whoFollows, whoIsFollowed));
+        return repository.save(new Follow(LocalDateTime.now(), whoFollows, whoIsFollowed));
     }
 
     public Follow getById(Long id) {
@@ -68,8 +67,7 @@ public class FollowService {
             return null;
         }
         Follow toUnfollow = result.get();
-        Date now = new Date();
-        toUnfollow.setEndedAt(now);
+        toUnfollow.setEndedAt(LocalDateTime.now());
         return repository.save(toUnfollow);
     }
 

@@ -3,6 +3,7 @@ package com.greenhabits.domain.relationship;
 import com.greenhabits.domain.node.AppUser;
 import org.neo4j.ogm.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RelationshipEntity(type = "FOLLOWS")
@@ -11,11 +12,11 @@ public class Follow {
     @GeneratedValue
     private Long id;
 
-    @Property(value = "started_at")
-    private Date startedAt;
+    @Property(value = "startedAt")
+    private LocalDateTime startedAt;
 
-    @Property(value = "ended_at")
-    private Date endedAt;
+    @Property(value = "endedAt")
+    private LocalDateTime endedAt;
 
     @StartNode
     private AppUser whoFollows;
@@ -26,7 +27,7 @@ public class Follow {
     public Follow() {
     }
 
-    public Follow(Date startedAt, AppUser whoFollows, AppUser whoIsFollowed) {
+    public Follow(LocalDateTime startedAt, AppUser whoFollows, AppUser whoIsFollowed) {
         this.startedAt = startedAt;
         this.endedAt = null;
         this.whoFollows = whoFollows;
@@ -37,19 +38,19 @@ public class Follow {
         return id;
     }
 
-    public Date getStartedAt() {
+    public LocalDateTime getStartedAt() {
         return startedAt;
     }
 
-    public void setStartedAt(Date startedAt) {
+    public void setStartedAt(LocalDateTime startedAt) {
         this.startedAt = startedAt;
     }
 
-    public Date getEndedAt() {
+    public LocalDateTime getEndedAt() {
         return endedAt;
     }
 
-    public void setEndedAt(Date endedAt) {
+    public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
     }
 

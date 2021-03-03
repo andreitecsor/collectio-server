@@ -6,7 +6,7 @@ import com.greenhabits.domain.relationship.Enrol;
 import com.greenhabits.repository.EnrolRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,15 +23,13 @@ public class EnrolService {
     }
 
     public Enrol create(Long idAppUser, Long idChallenge) {
-        Date now = new Date();
-
         AppUser appUser = appUserService.getById(idAppUser);
         Challenge challenge = challengeService.getById(idChallenge);
 
         if (appUser == null || challenge == null) {
             return null;
         }
-        return repository.save(new Enrol(now, appUser, challenge));
+        return repository.save(new Enrol(LocalDateTime.now(), appUser, challenge));
     }
 
     public List<Enrol> getAll() {
@@ -75,8 +73,7 @@ public class EnrolService {
             return null;
         }
         Enrol toEnd = result.get();
-        Date now = new Date();
-        toEnd.setEndedAt(now);
+        toEnd.setEndedAt(LocalDateTime.now());
         return repository.save(toEnd);
     }
 
