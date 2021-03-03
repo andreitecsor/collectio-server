@@ -14,8 +14,8 @@ public class Influence {
     @Property(value = "when")
     private LocalDateTime when;
 
-    @Property(value = "challengeId")
-    private Long challengeId;
+    @Property(value = "enrolId")
+    private Long enrolId;
 
     @StartNode
     private AppUser whoInfluenced;
@@ -23,14 +23,18 @@ public class Influence {
     @EndNode
     private AppUser whoIsInfluenced;
 
-    public Influence(LocalDateTime when, Long challengeId, AppUser whoInfluenced, AppUser whoIsInfluenced) {
+    public Influence(LocalDateTime when, Long enrolId, AppUser whoInfluenced, AppUser whoIsInfluenced) {
         this.when = when;
-        this.challengeId = challengeId;
+        this.enrolId = enrolId;
         this.whoInfluenced = whoInfluenced;
         this.whoIsInfluenced = whoIsInfluenced;
     }
 
     public Influence() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public LocalDateTime getWhen() {
@@ -41,12 +45,12 @@ public class Influence {
         this.when = when;
     }
 
-    public Long getChallengeId() {
-        return challengeId;
+    public Long getEnrolId() {
+        return enrolId;
     }
 
-    public void setChallengeId(Long challengeId) {
-        this.challengeId = challengeId;
+    public void setEnrolId(Long enrolId) {
+        this.enrolId = enrolId;
     }
 
     public AppUser getWhoInfluenced() {
@@ -74,7 +78,7 @@ public class Influence {
 
         if (id != null ? !id.equals(influence.id) : influence.id != null) return false;
         if (when != null ? !when.equals(influence.when) : influence.when != null) return false;
-        if (challengeId != null ? !challengeId.equals(influence.challengeId) : influence.challengeId != null)
+        if (enrolId != null ? !enrolId.equals(influence.enrolId) : influence.enrolId != null)
             return false;
         if (whoInfluenced != null ? !whoInfluenced.equals(influence.whoInfluenced) : influence.whoInfluenced != null)
             return false;
@@ -85,7 +89,7 @@ public class Influence {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (when != null ? when.hashCode() : 0);
-        result = 31 * result + (challengeId != null ? challengeId.hashCode() : 0);
+        result = 31 * result + (enrolId != null ? enrolId.hashCode() : 0);
         result = 31 * result + (whoInfluenced != null ? whoInfluenced.hashCode() : 0);
         result = 31 * result + (whoIsInfluenced != null ? whoIsInfluenced.hashCode() : 0);
         return result;
@@ -96,7 +100,7 @@ public class Influence {
         return "Influence{" +
                 "id=" + id +
                 ", when=" + when +
-                ", challengeId=" + challengeId +
+                ", challengeId=" + enrolId +
                 ", whoInfluenced=" + whoInfluenced +
                 ", whoIsInfluenced=" + whoIsInfluenced +
                 '}';

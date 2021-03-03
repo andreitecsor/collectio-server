@@ -43,6 +43,9 @@ public class ChallengeService {
         Challenge challengeToUpdate = persistedChallenge.get();
 
         challengeToUpdate.setTitle(challenge.getTitle());
+        challengeToUpdate.setBrief(challenge.getBrief());
+        challengeToUpdate.setDescription(challenge.getDescription());
+        challengeToUpdate.setMediaLink(challenge.getMediaLink());
         return repository.save(challengeToUpdate);
     }
 
