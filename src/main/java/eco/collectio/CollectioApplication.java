@@ -1,17 +1,31 @@
 package eco.collectio;
 
+import eco.collectio.domain.Challenge;
+import eco.collectio.repository.UserRepository;
+import eco.collectio.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//TODO:Complete this:
-//@EnableNeo4jRepositories(basePackageClasses = Myrepo.class)
+import java.util.Set;
+
+@EnableNeo4jRepositories(basePackageClasses = UserRepository.class)
 @SpringBootApplication
 @EnableTransactionManagement
-public class CollectioApplication {
+public class CollectioApplication implements CommandLineRunner {
+    @Autowired
+    private UserService userService;
 
     public static void main(String[] args) {
         SpringApplication.run(CollectioApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        Set<Challenge> joinedChallenges = userService.getAll().get(0).getJoinedChallenges();
+        System.out.println(joinedChallenges);
     }
 }
