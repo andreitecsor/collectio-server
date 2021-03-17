@@ -1,7 +1,6 @@
 package eco.collectio.service;
 
 import eco.collectio.domain.Challenge;
-import eco.collectio.domain.User;
 import eco.collectio.repository.ChallengeRepository;
 import org.springframework.stereotype.Service;
 

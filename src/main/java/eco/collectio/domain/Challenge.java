@@ -1,9 +1,9 @@
 package eco.collectio.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.neo4j.ogm.annotation.*;
-
-import java.util.Set;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 @NodeEntity
 public class Challenge {
@@ -14,13 +14,9 @@ public class Challenge {
     @Property(name = "title")
     private String title;
 
-    @Relationship(type = "JOINED", direction = Relationship.INCOMING)
-    private Set<User> usersJoined;
-
-    public Challenge(Long id, String title, Set<User> usersJoined) {
+    public Challenge(Long id, String title) {
         this.id = id;
         this.title = title;
-        this.usersJoined = usersJoined;
     }
 
     public Long getId() {
@@ -46,8 +42,4 @@ public class Challenge {
         return title != null ? title.hashCode() : 0;
     }
 
-    @JsonIgnore
-    public Set<User> getUsersJoined() {
-        return usersJoined;
-    }
 }

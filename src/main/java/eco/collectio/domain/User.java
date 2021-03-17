@@ -2,8 +2,6 @@ package eco.collectio.domain;
 
 import org.neo4j.ogm.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @NodeEntity
@@ -16,12 +14,14 @@ public class User {
     private String name;
 
     @Relationship(type = "JOINED", direction = Relationship.OUTGOING)
-    private Set<Challenge> joinedChallenges;
+    private Set<Challenge> activeChallenges;
 
     public User(Long id, String name, Set<Challenge> joinedChallenges) {
         this.id = id;
         this.name = name;
-        this.joinedChallenges = joinedChallenges;
+        //TODO: Parcurgere Set si doar in cazul in care relatia
+        //      are endedAt
+        this.activeChallenges = joinedChallenges;
     }
 
     public Long getId() {
@@ -32,7 +32,7 @@ public class User {
         return name;
     }
 
-    public Set<Challenge> getJoinedChallenges() {
-        return joinedChallenges;
+    public Set<Challenge> getActiveChallenges() {
+        return activeChallenges;
     }
 }
