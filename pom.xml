@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com</groupId>
-    <artifactId>collectio</artifactId>
+    <artifactId>collectio-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>green-habits</name>
+    <name>collectio-server</name>
     <description>Eco lifestyle tracker(bachelor's thesis)</description>
 
     <properties>
