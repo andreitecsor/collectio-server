@@ -1,8 +1,9 @@
 package eco.collectio.domain;
 
-import org.neo4j.ogm.annotation.*;
-
-import java.util.Set;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 @NodeEntity
 public class User {
@@ -13,15 +14,9 @@ public class User {
     @Property(name = "name")
     private String name;
 
-    @Relationship(type = "JOINED", direction = Relationship.OUTGOING)
-    private Set<Challenge> activeChallenges;
-
-    public User(Long id, String name, Set<Challenge> joinedChallenges) {
+    public User(Long id, String name) {
         this.id = id;
         this.name = name;
-        //TODO: Parcurgere Set si doar in cazul in care relatia
-        //      are endedAt
-        this.activeChallenges = joinedChallenges;
     }
 
     public Long getId() {
@@ -32,7 +27,12 @@ public class User {
         return name;
     }
 
-    public Set<Challenge> getActiveChallenges() {
-        return activeChallenges;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

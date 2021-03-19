@@ -24,7 +24,6 @@ public class CollectioApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        Set<Challenge> joinedChallenges = userService.getAll().get(0).getJoinedChallenges();
-//        System.out.println(joinedChallenges);
+
     }
 }

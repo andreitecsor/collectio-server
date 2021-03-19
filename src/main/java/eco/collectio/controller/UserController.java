@@ -13,16 +13,14 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-    private final JoinService joinService;
 
     public UserController(UserService userService, JoinService joinService) {
         this.userService = userService;
-        this.joinService = joinService;
     }
 
     @GetMapping("")
     public ResponseEntity<List<User>> getAll() {
-        List<User> result = userService.getAll();
+        List<User> result = userService.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -36,14 +34,5 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
-    }
-
-    @GetMapping("/challenge/{challengeId}")
-    public ResponseEntity<List<User>> getAllByChallenge(@PathVariable Long challengeId) {
-        List<User> result = userService.getAllByChallenge(challengeId);
-        if (result == null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok().body(result);
     }
 }

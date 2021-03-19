@@ -1,6 +1,5 @@
 package eco.collectio.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,15 +14,17 @@ public class Join {
 
     private LocalDateTime endedAt;
 
+    private LocalDateTime lastChecked;
+
     @StartNode
     private User user;
 
     @EndNode
     private Challenge challenge;
 
-    public Join(Long id, LocalDateTime startedAt, User user, Challenge challenge) {
-        this.id = id;
+    public Join(LocalDateTime startedAt, User user, Challenge challenge) {
         this.startedAt = startedAt;
+        this.lastChecked = this.startedAt;
         this.user = user;
         this.challenge = challenge;
     }
@@ -40,7 +41,10 @@ public class Join {
         return endedAt;
     }
 
-    @JsonIgnore
+    public LocalDateTime getLastChecked() {
+        return lastChecked;
+    }
+
     public User getUser() {
         return user;
     }
@@ -49,7 +53,23 @@ public class Join {
         return challenge;
     }
 
+    public void setStartedAt() {
+        this.startedAt = LocalDateTime.now();
+        this.lastChecked = startedAt;
+    }
+
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        return "Join{" +
+                "id=" + id +
+                ", startedAt=" + startedAt +
+                ", endedAt=" + endedAt +
+                ", lastChecked=" + lastChecked +
+                ", challenge=" + challenge +
+                '}';
     }
 }

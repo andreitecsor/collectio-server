@@ -5,6 +5,7 @@ import eco.collectio.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -14,12 +15,12 @@ public class UserService {
         this.repository = repository;
     }
 
-    public List<User> getAll() {
+    public List<User> get() {
         return repository.findAll();
     }
 
-    public List<User> getAllByChallenge(Long challengeId) {
-        return repository.findAllByChallenge(challengeId);
+    public Optional<User> get(Long id) {
+        return repository.findById(id);
     }
 
     public User create(User user) {

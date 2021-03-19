@@ -1,13 +1,10 @@
 package eco.collectio.controller;
 
 import eco.collectio.domain.Join;
-import eco.collectio.domain.User;
 import eco.collectio.service.JoinService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,11 +18,20 @@ public class JoinController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Join>> getAllByChallenge() {
-        List<Join> result = service.getAll();
+    public ResponseEntity<List<Join>> getAll() {
+        List<Join> result = service.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().body(result);
+    }
+
+    @PutMapping("/{userId}-{challengeId}")
+    public ResponseEntity<Join> create(@PathVariable Long userId,@PathVariable Long challengeId) {
+        Join result = service.upsertRelation(userId,challengeId);
+        if (result == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }
