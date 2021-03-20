@@ -6,9 +6,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.JoinRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,17 +30,31 @@ public class JoinService {
         return joinRepository.findByNodesIds(userId, challengeId);
     }
 
-    public Join upsertRelation(Long userId, Long challengeId) {
+    public List<Join> getAllActives(Long userId) {
+        return joinRepository.findAllActives(userId);
+    }
+
+    public Join startRestartChallenge(Long userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null) {
             Optional<User> persistedUser = userService.get(userId);
             Optional<Challenge> persistedChallenge = challengeService.get(challengeId);
-            if (persistedUser.isPresent() && persistedChallenge.isPresent()) {
-                Join join = new Join(LocalDateTime.now(), persistedUser.get(), persistedChallenge.get());
-                return joinRepository.save(join);
+            if (!persistedUser.isPresent() || !persistedChallenge.isPresent()) {
+                return null;
             }
+            Join join = new Join(LocalDateTime.now(), persistedUser.get(), persistedChallenge.get(), 1);
+            return joinRepository.save(join);
         }
-        result.setStartedAt();
+        result.restartChallenge();
+        return joinRepository.save(result);
+    }
+
+    public Join endChallenge(Long userId, Long challengeId) {
+        Join result = getByNodesIds(userId, challengeId);
+        if (result == null || result.getEndedAt() != null) {
+            return null;
+        }
+        result.endChallenge();
         return joinRepository.save(result);
     }
 

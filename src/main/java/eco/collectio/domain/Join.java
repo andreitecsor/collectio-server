@@ -16,17 +16,20 @@ public class Join {
 
     private LocalDateTime lastChecked;
 
+    private Integer timesTried;
+
     @StartNode
     private User user;
 
     @EndNode
     private Challenge challenge;
 
-    public Join(LocalDateTime startedAt, User user, Challenge challenge) {
+    public Join(LocalDateTime startedAt, User user, Challenge challenge, Integer timesTried) {
         this.startedAt = startedAt;
         this.lastChecked = this.startedAt;
         this.user = user;
         this.challenge = challenge;
+        this.timesTried = timesTried;
     }
 
     public Long getId() {
@@ -53,12 +56,20 @@ public class Join {
         return challenge;
     }
 
-    public void setStartedAt() {
-        this.startedAt = LocalDateTime.now();
-        this.lastChecked = startedAt;
+    public Integer getTimesTried() {
+        return timesTried;
     }
 
-    public void setEndedAt(LocalDateTime endedAt) {
+    public void restartChallenge() {
+        if (this.endedAt != null) {
+            this.startedAt = LocalDateTime.now();
+            this.lastChecked = startedAt;
+            this.endedAt = null;
+            timesTried += 1;
+        }
+    }
+
+    public void endChallenge() {
         this.endedAt = LocalDateTime.now();
     }
 
@@ -72,4 +83,6 @@ public class Join {
                 ", challenge=" + challenge +
                 '}';
     }
+
+
 }

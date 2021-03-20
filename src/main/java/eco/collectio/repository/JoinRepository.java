@@ -12,8 +12,10 @@ public interface JoinRepository extends Neo4jRepository<Join, Long> {
     @Override
     List<Join> findAll();
 
-    @Query("MATCH (user:User)-[relation:JOINED]->(challenge:Challenge) WHERE id(user) = $userId AND id(challenge) = $challengeId RETURN relation")
+    @Query("MATCH (user:User)-[relation:JOINED]->(challenge:Challenge) WHERE id(user) = $userId AND id(challenge) = $challengeId RETURN user,challenge,relation")
     Join findByNodesIds(Long userId, Long challengeId);
 
+    @Query("MATCH (user:User)-[relation:JOINED]->(challenge:Challenge) WHERE id(user) = $userId AND NOT EXISTS(relation.endedAt) RETURN user,challenge,relation")
+    List<Join> findAllActives(Long userId);
 
 }
