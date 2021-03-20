@@ -1,7 +1,8 @@
 package eco.collectio.controller;
 
-import eco.collectio.domain.Challenge;
-import eco.collectio.service.ChallengeService;
+import eco.collectio.domain.User;
+import eco.collectio.service.JoinService;
+import eco.collectio.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,17 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/challenge")
-public class ChallengeController {
-    private final ChallengeService service;
+@RequestMapping("/user")
+public class UserController {
+    private final UserService userService;
 
-    public ChallengeController(ChallengeService service) {
-        this.service = service;
+    public UserController(UserService userService, JoinService joinService) {
+        this.userService = userService;
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Challenge>> getAll() {
-        List<Challenge> result = service.get();
+    public ResponseEntity<List<User>> getAll() {
+        List<User> result = userService.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -27,8 +28,8 @@ public class ChallengeController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Challenge> create(@RequestBody Challenge challenge) {
-        Challenge result = service.create(challenge);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        User result = userService.create(user);
         if (result == null) {
             return ResponseEntity.badRequest().build();
         }

@@ -1,6 +1,6 @@
 package eco.collectio.repository;
 
-import eco.collectio.domain.node.AppUser;
+import eco.collectio.domain.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AppUserRepository extends Neo4jRepository<AppUser, Long> {
-    List<AppUser> findAll();
+public interface UserRepository extends Neo4jRepository<User, Long> {
+    @Override
+    List<User> findAll();
 
-    Optional<AppUser> findById(Long id);
-
+    @Override
+    Optional<User> findById(Long id);
 }
