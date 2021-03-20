@@ -45,8 +45,13 @@ public class JoinService {
             Join join = new Join(LocalDateTime.now(), persistedUser.get(), persistedChallenge.get(), 1);
             return joinRepository.save(join);
         }
-        result.restartChallenge();
-        return joinRepository.save(result);
+
+        if (result.getEndedAt() != null) {
+            result.restartChallenge();
+            return joinRepository.save(result);
+        }
+
+        return null;
     }
 
     public Join endChallenge(Long userId, Long challengeId) {

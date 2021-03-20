@@ -1,6 +1,8 @@
 package eco.collectio.controller;
 
+import eco.collectio.domain.Influence;
 import eco.collectio.domain.Join;
+import eco.collectio.service.InfluenceService;
 import eco.collectio.service.JoinService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,12 @@ import java.util.List;
 @RestController
 @RequestMapping("joined")
 public class JoinController {
-    private final JoinService service;
+    private final JoinService joinService;
+    private final InfluenceService influenceService;
 
-    public JoinController(JoinService joinService) {
-        this.service = joinService;
+    public JoinController(JoinService joinService, InfluenceService influenceService) {
+        this.joinService = joinService;
+        this.influenceService = influenceService;
     }
 
     /**
@@ -22,7 +26,7 @@ public class JoinController {
      */
     @GetMapping("")
     public ResponseEntity<List<Join>> get() {
-        List<Join> result = service.get();
+        List<Join> result = joinService.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -34,7 +38,7 @@ public class JoinController {
      */
     @GetMapping("/active/{userId}")
     public ResponseEntity<List<Join>> get(@PathVariable Long userId) {
-        List<Join> result = service.getAllActives(userId);
+        List<Join> result = joinService.getAllActives(userId);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -46,7 +50,7 @@ public class JoinController {
      */
     @GetMapping("/{userId}-{challengeId}")
     public ResponseEntity<Join> get(@PathVariable Long userId, @PathVariable Long challengeId) {
-        Join result = service.getByNodesIds(userId, challengeId);
+        Join result = joinService.getByNodesIds(userId, challengeId);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -60,10 +64,28 @@ public class JoinController {
      */
     @PutMapping("/{userId}-{challengeId}")
     public ResponseEntity<Join> upsert(@PathVariable Long userId, @PathVariable Long challengeId) {
-        Join result = service.startRestartChallenge(userId, challengeId);
+        Join result = joinService.startRestartChallenge(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    /**
+     * Create JOINED relationship influenced by other user.
+     * If exists and endedAt is not null -> reset startedAt, lastChecked, endedAt and increment timesTried
+     * TODO:Should return specific error.
+     */
+    @PutMapping("/{userId}-{challengeId}/influenced={influencerId}")
+    public ResponseEntity<Join> createByInfluenced(@PathVariable Long userId,
+                                                   @PathVariable Long challengeId,
+                                                   @PathVariable Long influencerId) {
+        Join result = joinService.startRestartChallenge(userId, challengeId);
+        if (result == null || result.getEndedAt() != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Influence influence = influenceService.create(influencerId, userId, challengeId);
+        System.out.println("Influence relationship created: " + influence);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -74,11 +96,12 @@ public class JoinController {
      */
     @PutMapping("/end/{userId}-{challengeId}")
     public ResponseEntity<Join> endChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
-        Join result = service.endChallenge(userId, challengeId);
+        Join result = joinService.endChallenge(userId, challengeId);
         if (result == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
 
 }
