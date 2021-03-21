@@ -15,15 +15,27 @@ public class UserService {
         this.repository = repository;
     }
 
+    /**
+     * @return all users from database
+     */
     public List<User> get() {
         return repository.findAll();
     }
 
-    public Optional<User> get(Long id) {
+    /**
+     * @param id user's unique id
+     * @return specific user from database via id
+     */
+    public Optional<User> getById(Long id) {
         return repository.findById(id);
     }
 
+    /**
+     * @param user's properties without id
+     * @return the new user added or null if: user is null or it's data types are incorrect
+     */
     public User create(User user) {
+        //TODO:Should check if the user already exists based on email.
         if (user == null) {
             return null;
         }

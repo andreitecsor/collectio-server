@@ -1,13 +1,11 @@
 package eco.collectio.controller;
 
-import eco.collectio.domain.Challenge;
 import eco.collectio.domain.Influence;
-import eco.collectio.domain.Join;
-import eco.collectio.service.ChallengeService;
 import eco.collectio.service.InfluenceService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

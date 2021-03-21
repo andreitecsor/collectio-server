@@ -1,7 +1,6 @@
 package eco.collectio.service;
 
 import eco.collectio.domain.Challenge;
-import eco.collectio.domain.Join;
 import eco.collectio.repository.ChallengeRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +15,27 @@ public class ChallengeService {
         this.repository = repository;
     }
 
+    /**
+     * @return all challenges from database
+     */
     public List<Challenge> get() {
         return repository.findAll();
     }
 
-    public Optional<Challenge> get(Long id) {
+    /**
+     * @param id challenge's unique id
+     * @return specific user from database via id
+     */
+    public Optional<Challenge> getById(Long id) {
         return repository.findById(id);
     }
 
+    /**
+     * @param challenge's properties without id
+     * @return the new challenge added or null if: challenge is null or it's data types are incorrect
+     */
     public Challenge create(Challenge challenge) {
+        //TODO:Should check if the user already exists based on email.
         return repository.save(challenge);
     }
 }

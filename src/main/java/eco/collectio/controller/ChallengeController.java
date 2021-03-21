@@ -17,8 +17,12 @@ public class ChallengeController {
         this.service = service;
     }
 
+
+    /**
+     * GET all challenges
+     */
     @GetMapping("")
-    public ResponseEntity<List<Challenge>> getAll() {
+    public ResponseEntity<List<Challenge>> get() {
         List<Challenge> result = service.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
@@ -26,6 +30,9 @@ public class ChallengeController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * CREATE a challenge
+     */
     @PostMapping("")
     public ResponseEntity<Challenge> create(@RequestBody Challenge challenge) {
         Challenge result = service.create(challenge);
@@ -34,4 +41,5 @@ public class ChallengeController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
 }

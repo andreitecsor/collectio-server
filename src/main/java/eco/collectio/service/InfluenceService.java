@@ -1,6 +1,5 @@
 package eco.collectio.service;
 
-import eco.collectio.domain.Challenge;
 import eco.collectio.domain.Influence;
 import eco.collectio.domain.User;
 import eco.collectio.repository.InfluenceRepository;
@@ -14,26 +13,37 @@ import java.util.Optional;
 public class InfluenceService {
     private final InfluenceRepository influenceRepository;
     private final UserService userService;
-    private final ChallengeService challengeService;
 
-    public InfluenceService(InfluenceRepository repository, UserService userService, ChallengeService challengeService) {
+    public InfluenceService(InfluenceRepository repository, UserService userService) {
         this.influenceRepository = repository;
         this.userService = userService;
-        this.challengeService = challengeService;
     }
 
+    /**
+     * @return all INFLUENCED relationships from database
+     */
     public List<Influence> get() {
         return influenceRepository.findAll();
     }
 
-    public Influence create(Long whoInfluencedId, Long whoIsInfluencedId, Long challengeId) {
-        Optional<User> whoInfluenced = userService.get(whoInfluencedId);
-        Optional<User> whoIsInfluenced = userService.get(whoIsInfluencedId);
-        Optional<Challenge> challenge = challengeService.get(challengeId);
-        if (!whoInfluenced.isPresent() || !whoIsInfluenced.isPresent() || !challenge.isPresent()) {
-            return null;
+    /**
+     * @param whoInfluencedId   of user who influenced other user to join a challenge
+     * @param whoIsInfluencedId of user who was influenced
+     * @return new or updated INFLUENCED relationship between the two users
+     */
+    public Influence upsert(Long whoInfluencedId, Long whoIsInfluencedId) {
+        Influence result = influenceRepository.findByNodesIds(whoInfluencedId, whoIsInfluencedId);
+        if (result == null) {
+            Optional<User> whoInfluenced = userService.getById(whoInfluencedId);
+            Optional<User> whoIsInfluenced = userService.getById(whoIsInfluencedId);
+            if (!whoInfluenced.isPresent() || !whoIsInfluenced.isPresent()) {
+                System.err.println("user or challenge does not exists");
+                return null;
+            }
+            Influence newInfluenceRelation = new Influence(whoInfluenced.get(), whoIsInfluenced.get(), 1, LocalDateTime.now());
+            return influenceRepository.save(newInfluenceRelation);
         }
-        Influence influence = new Influence(whoInfluenced.get(), whoIsInfluenced.get(), challengeId, LocalDateTime.now());
-        return influenceRepository.save(influence);
+        result.increaseInfluence();
+        return influenceRepository.save(result);
     }
 }
