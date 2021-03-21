@@ -14,9 +14,7 @@ public class Challenge {
     @Property(name = "title")
     private String title;
 
-
-    public Challenge(Long id, String title) {
-        this.id = id;
+    public Challenge(String title) {
         this.title = title;
     }
 

@@ -16,15 +16,15 @@ public class Influence {
     @EndNode
     private User whoIsInfluenced;
 
-    private Long challengeId;
+    private Integer timesInfluenced;
 
-    private LocalDateTime when;
+    private LocalDateTime lastTime;
 
-    public Influence(User whoInfluenced, User whoIsInfluenced, Long challenge, LocalDateTime when) {
+    public Influence(User whoInfluenced, User whoIsInfluenced, Integer timesInfluenced, LocalDateTime when) {
         this.whoInfluenced = whoInfluenced;
         this.whoIsInfluenced = whoIsInfluenced;
-        this.challengeId = challenge;
-        this.when = when;
+        this.timesInfluenced = timesInfluenced;
+        this.lastTime = when;
     }
 
     public Long getId() {
@@ -39,12 +39,17 @@ public class Influence {
         return whoIsInfluenced;
     }
 
-    public Long getChallengeId() {
-        return challengeId;
+    public Integer getTimesInfluenced() {
+        return timesInfluenced;
     }
 
-    public LocalDateTime getWhen() {
-        return when;
+    public LocalDateTime getLastTime() {
+        return lastTime;
+    }
+
+    public void increaseInfluence() {
+        this.timesInfluenced += 1;
+        this.lastTime = LocalDateTime.now();
     }
 
     @Override
@@ -53,8 +58,8 @@ public class Influence {
                 "id=" + id +
                 ", whoInfluenced=" + whoInfluenced +
                 ", whoIsInfluenced=" + whoIsInfluenced +
-                ", challengeId=" + challengeId +
-                ", when=" + when +
+                ", timesInfluenced=" + timesInfluenced +
+                ", lastTime=" + lastTime +
                 '}';
     }
 }

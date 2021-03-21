@@ -1,7 +1,6 @@
 package eco.collectio.controller;
 
 import eco.collectio.domain.User;
-import eco.collectio.service.JoinService;
 import eco.collectio.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService, JoinService joinService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * GET all users
+     */
     @GetMapping("")
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<User>> get() {
         List<User> result = userService.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
@@ -27,6 +29,9 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    /**
+     * CREATE a new user
+     */
     @PostMapping("")
     public ResponseEntity<User> create(@RequestBody User user) {
         User result = userService.create(user);
