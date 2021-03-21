@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories(basePackageClasses = {UserRepository.class, JoinRepository.class, ChallengeRepository.class})
 @SpringBootApplication
 @EnableTransactionManagement
-public class CollectioApplication implements CommandLineRunner {
+public class CollectioApplication{
     @Autowired
     private UserService userService;
 
@@ -22,8 +22,4 @@ public class CollectioApplication implements CommandLineRunner {
         SpringApplication.run(CollectioApplication.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-
-    }
 }
