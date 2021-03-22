@@ -1,9 +1,8 @@
 package eco.collectio.domain;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.*;
+
+import java.util.List;
 
 @NodeEntity
 public class Challenge {
@@ -14,9 +13,13 @@ public class Challenge {
     @Property(name = "title")
     private String title;
 
-    public Challenge(Long id, String title) {
+    @Relationship(type = "HAS", direction = Relationship.OUTGOING)
+    private List<Stage> stages;
+
+    public Challenge(Long id, String title, List<Stage> stages) {
         this.id = id;
         this.title = title;
+        this.stages = stages;
     }
 
     public Long getId() {
@@ -25,6 +28,10 @@ public class Challenge {
 
     public String getTitle() {
         return title;
+    }
+
+    public List<Stage> getStages() {
+        return stages;
     }
 
     @Override
