@@ -2,6 +2,8 @@ package eco.collectio.controller;
 
 import eco.collectio.domain.Influence;
 import eco.collectio.service.InfluenceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +16,14 @@ import java.util.List;
 public class InfluenceController {
     private final InfluenceService service;
 
+    private Logger logger = LoggerFactory.getLogger(InfluenceController.class);
+
     public InfluenceController(InfluenceService service) {
         this.service = service;
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Influence>> get() {
+    public ResponseEntity get() {
         List<Influence> result = service.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
