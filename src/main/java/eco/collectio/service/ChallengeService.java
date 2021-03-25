@@ -36,6 +36,9 @@ public class ChallengeService {
      */
     public Challenge create(Challenge challenge) {
         //TODO:Should check if the user already exists based on email.
+        if (challenge == null || challenge.getTitle() == null) {
+            return null;
+        }
         return repository.save(challenge);
     }
 }

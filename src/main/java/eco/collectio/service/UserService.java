@@ -36,7 +36,7 @@ public class UserService {
      */
     public User create(User user) {
         //TODO:Should check if the user already exists based on email.
-        if (user == null) {
+        if (user == null || user.getName() == null) {
             return null;
         }
         return repository.save(user);

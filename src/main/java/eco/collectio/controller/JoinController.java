@@ -4,6 +4,8 @@ import eco.collectio.domain.Influence;
 import eco.collectio.domain.Join;
 import eco.collectio.service.InfluenceService;
 import eco.collectio.service.JoinService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ public class JoinController {
     private final JoinService joinService;
     private final InfluenceService influenceService;
 
+    private Logger logger = LoggerFactory.getLogger(JoinController.class);
+
     public JoinController(JoinService joinService, InfluenceService influenceService) {
         this.joinService = joinService;
         this.influenceService = influenceService;
@@ -25,7 +29,7 @@ public class JoinController {
      * Getting all JOINED relationship
      */
     @GetMapping("")
-    public ResponseEntity<List<Join>> get() {
+    public ResponseEntity get() {
         List<Join> result = joinService.get();
         if (result == null) {
             return ResponseEntity.noContent().build();
@@ -37,7 +41,7 @@ public class JoinController {
      * Getting all active(endedAt is null) JOINED relationship
      */
     @GetMapping("/active/{userId}")
-    public ResponseEntity<List<Join>> get(@PathVariable Long userId) {
+    public ResponseEntity get(@PathVariable Long userId) {
         List<Join> result = joinService.getAllActives(userId);
         if (result == null) {
             return ResponseEntity.noContent().build();
@@ -49,7 +53,7 @@ public class JoinController {
      * Getting a JOINED relationship based on userId and challengeId
      */
     @GetMapping("/{userId}-{challengeId}")
-    public ResponseEntity<Join> get(@PathVariable Long userId, @PathVariable Long challengeId) {
+    public ResponseEntity get(@PathVariable Long userId, @PathVariable Long challengeId) {
         Join result = joinService.getByNodesIds(userId, challengeId);
         if (result == null) {
             return ResponseEntity.noContent().build();
@@ -62,11 +66,13 @@ public class JoinController {
      * If exists and endedAt is not null -> reset startedAt, lastChecked, endedAt and increment timesTried
      */
     @PutMapping("/{userId}-{challengeId}")
-    public ResponseEntity<Join> upsert(@PathVariable Long userId, @PathVariable Long challengeId) {
+    public ResponseEntity upsert(@PathVariable Long userId, @PathVariable Long challengeId) {
         Join result = joinService.startRestartChallenge(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
-            System.err.println("JOINED relationship does not exists or it's already ended.");
-            return ResponseEntity.badRequest().build();
+            logger.error(" JOINED relationship requested with userId= " + userId +
+                    ", challengeId= " + challengeId +
+                    " does not exist or it's already ended. ");
+            return ResponseEntity.badRequest().body("Invalid path variables");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -76,17 +82,20 @@ public class JoinController {
      * If exists and endedAt is not null -> reset startedAt, lastChecked, endedAt and increment timesTried
      */
     @PutMapping("/{userId}-{challengeId}/influenced={influencerId}")
-    public ResponseEntity<Join> createByInfluenced(@PathVariable Long userId,
-                                                   @PathVariable Long challengeId,
-                                                   @PathVariable Long influencerId) {
+    public ResponseEntity createByInfluenced(@PathVariable Long userId,
+                                             @PathVariable Long challengeId,
+                                             @PathVariable Long influencerId) {
         Join result = joinService.startRestartChallenge(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
-            System.err.println("JOINED relationship does not exists or it's already ended.");
-            return ResponseEntity.badRequest().build();
+            logger.error("JOINED relationship requested with userId= " + userId +
+                    ", challengeId= " + challengeId +
+                    ", influencerId= " + influencerId +
+                    " does not exist or it's already ended. ");
+            return ResponseEntity.badRequest().body("Invalid path variables");
         }
         Influence influence = influenceService.upsert(influencerId, userId);
 
-        System.out.println("Influence relationship created: " + influence);
+        logger.info("Influence relationship created" + influence );
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -95,13 +104,15 @@ public class JoinController {
      * Else does nothing.
      */
     @PutMapping("/end/{userId}-{challengeId}")
-    public ResponseEntity<Join> endChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
+    public ResponseEntity endChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
         Join result = joinService.endChallenge(userId, challengeId);
         if (result == null) {
-            System.err.println("JOINED relationship does not exists or it's already ended.");
-            return ResponseEntity.badRequest().build();
+            logger.error("JOINED relationship requested with userId= " + userId +
+                    ", challengeId= " + challengeId +
+                    " does not exist or it's already ended. ");
+            return ResponseEntity.badRequest().body("Invalid path variables");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
