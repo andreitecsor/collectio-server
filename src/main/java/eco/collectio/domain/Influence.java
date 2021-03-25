@@ -2,7 +2,7 @@ package eco.collectio.domain;
 
 import org.neo4j.ogm.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @RelationshipEntity(type = "INFLUENCED")
 public class Influence {
@@ -18,9 +18,9 @@ public class Influence {
 
     private Integer timesInfluenced;
 
-    private LocalDateTime lastTime;
+    private LocalDate lastTime;
 
-    public Influence(User whoInfluenced, User whoIsInfluenced, Integer timesInfluenced, LocalDateTime when) {
+    public Influence(User whoInfluenced, User whoIsInfluenced, Integer timesInfluenced, LocalDate when) {
         this.whoInfluenced = whoInfluenced;
         this.whoIsInfluenced = whoIsInfluenced;
         this.timesInfluenced = timesInfluenced;
@@ -43,13 +43,13 @@ public class Influence {
         return timesInfluenced;
     }
 
-    public LocalDateTime getLastTime() {
+    public LocalDate getLastTime() {
         return lastTime;
     }
 
     public void increaseInfluence() {
         this.timesInfluenced += 1;
-        this.lastTime = LocalDateTime.now();
+        this.lastTime = LocalDate.now();
     }
 
     @Override

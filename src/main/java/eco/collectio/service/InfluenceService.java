@@ -5,6 +5,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.InfluenceRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class InfluenceService {
                 System.err.println("user or challenge does not exists");
                 return null;
             }
-            Influence newInfluenceRelation = new Influence(whoInfluenced.get(), whoIsInfluenced.get(), 1, LocalDateTime.now());
+            Influence newInfluenceRelation = new Influence(whoInfluenced.get(), whoIsInfluenced.get(), 1, LocalDate.now());
             return influenceRepository.save(newInfluenceRelation);
         }
         result.increaseInfluence();

@@ -18,9 +18,6 @@ public class InfluenceController {
         this.service = service;
     }
 
-    /**
-     * Getting all INFLUENCED relationship
-     */
     @GetMapping("")
     public ResponseEntity<List<Influence>> get() {
         List<Influence> result = service.get();

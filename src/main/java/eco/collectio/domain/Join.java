@@ -2,7 +2,7 @@ package eco.collectio.domain;
 
 import org.neo4j.ogm.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @RelationshipEntity(type = "JOINED")
 public class Join {
@@ -10,11 +10,11 @@ public class Join {
     @GeneratedValue
     private Long id;
 
-    private LocalDateTime startedAt;
+    private LocalDate startedAt;
 
-    private LocalDateTime endedAt;
+    private LocalDate endedAt;
 
-    private LocalDateTime lastChecked;
+    private LocalDate lastChecked;
 
     private Integer timesTried;
 
@@ -24,7 +24,7 @@ public class Join {
     @EndNode
     private Challenge challenge;
 
-    public Join(LocalDateTime startedAt, User user, Challenge challenge, Integer timesTried) {
+    public Join(LocalDate startedAt, User user, Challenge challenge, Integer timesTried) {
         this.startedAt = startedAt;
         this.lastChecked = this.startedAt;
         this.user = user;
@@ -36,15 +36,15 @@ public class Join {
         return id;
     }
 
-    public LocalDateTime getStartedAt() {
+    public LocalDate getStartedAt() {
         return startedAt;
     }
 
-    public LocalDateTime getEndedAt() {
+    public LocalDate getEndedAt() {
         return endedAt;
     }
 
-    public LocalDateTime getLastChecked() {
+    public LocalDate getLastChecked() {
         return lastChecked;
     }
 
@@ -62,7 +62,7 @@ public class Join {
 
     public void restartChallenge() {
         if (this.endedAt != null) {
-            this.startedAt = LocalDateTime.now();
+            this.startedAt = LocalDate.now();
             this.lastChecked = startedAt;
             this.endedAt = null;
             timesTried += 1;
@@ -70,7 +70,7 @@ public class Join {
     }
 
     public void endChallenge() {
-        this.endedAt = LocalDateTime.now();
+        this.endedAt = LocalDate.now();
     }
 
     @Override

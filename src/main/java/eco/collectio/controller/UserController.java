@@ -17,9 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    /**
-     * GET all users
-     */
+
     @GetMapping("")
     public ResponseEntity<List<User>> get() {
         List<User> result = userService.get();
@@ -29,9 +27,6 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    /**
-     * CREATE a new user
-     */
     @PostMapping("")
     public ResponseEntity<User> create(@RequestBody User user) {
         User result = userService.create(user);
