@@ -3,6 +3,7 @@ package eco.collectio.domain;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @RelationshipEntity(type = "JOINED")
 public class Join {
@@ -18,18 +19,21 @@ public class Join {
 
     private Integer timesTried;
 
+    private Integer bestRecord; // number of weeks
+
     @StartNode
     private User user;
 
     @EndNode
     private Challenge challenge;
 
-    public Join(LocalDate startedAt, User user, Challenge challenge, Integer timesTried) {
+    public Join(LocalDate startedAt, User user, Challenge challenge) {
         this.startedAt = startedAt;
         this.lastChecked = this.startedAt;
         this.user = user;
         this.challenge = challenge;
-        this.timesTried = timesTried;
+        this.timesTried = 1;
+        this.bestRecord = 0;
     }
 
     public Long getId() {
@@ -60,6 +64,10 @@ public class Join {
         return timesTried;
     }
 
+    public Integer getBestRecord() {
+        return bestRecord;
+    }
+
     public void restartChallenge() {
         if (this.endedAt != null) {
             this.startedAt = LocalDate.now();
@@ -71,6 +79,14 @@ public class Join {
 
     public void endChallenge() {
         this.endedAt = LocalDate.now();
+        int weeks = (int) ChronoUnit.WEEKS.between(this.startedAt, this.endedAt);
+        if (weeks > this.bestRecord) {
+            this.bestRecord = weeks;
+        }
+    }
+
+    public void checkChallenge() {
+        this.lastChecked = this.lastChecked.plusDays(7);
     }
 
     @Override
@@ -80,6 +96,9 @@ public class Join {
                 ", startedAt=" + startedAt +
                 ", endedAt=" + endedAt +
                 ", lastChecked=" + lastChecked +
+                ", timesTried=" + timesTried +
+                ", bestRecord=" + bestRecord +
+                ", user=" + user +
                 ", challenge=" + challenge +
                 '}';
     }

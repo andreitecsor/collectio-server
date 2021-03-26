@@ -35,7 +35,7 @@ public class ChallengeService {
      * @return the new challenge added or null if: challenge is null or it's data types are incorrect
      */
     public Challenge create(Challenge challenge) {
-        //TODO:Should check if the user already exists based on email.
+        //TODO:Should check if the challenge already exists based on title.
         if (challenge == null || challenge.getTitle() == null) {
             return null;
         }

@@ -3,10 +3,11 @@ package eco.collectio.service;
 import eco.collectio.domain.Influence;
 import eco.collectio.domain.User;
 import eco.collectio.repository.InfluenceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class InfluenceService {
     private final InfluenceRepository influenceRepository;
     private final UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(Influence.class);
 
     public InfluenceService(InfluenceRepository repository, UserService userService) {
         this.influenceRepository = repository;
@@ -38,7 +41,7 @@ public class InfluenceService {
             Optional<User> whoInfluenced = userService.getById(whoInfluencedId);
             Optional<User> whoIsInfluenced = userService.getById(whoIsInfluencedId);
             if (!whoInfluenced.isPresent() || !whoIsInfluenced.isPresent()) {
-                System.err.println("user or challenge does not exists");
+                logger.error("user whoInfluenced(id=" + whoInfluencedId + ") or user whoIsInfluenced(id=" + whoIsInfluencedId + ") does not exists");
                 return null;
             }
             Influence newInfluenceRelation = new Influence(whoInfluenced.get(), whoIsInfluenced.get(), 1, LocalDate.now());
