@@ -85,6 +85,10 @@ public class Join {
         }
     }
 
+    public void checkChallenge() {
+        this.lastChecked = this.lastChecked.plusDays(7);
+    }
+
     @Override
     public String toString() {
         return "Join{" +
@@ -98,4 +102,6 @@ public class Join {
                 ", challenge=" + challenge +
                 '}';
     }
+
+
 }

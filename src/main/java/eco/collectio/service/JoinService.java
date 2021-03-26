@@ -7,6 +7,7 @@ import eco.collectio.repository.JoinRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,4 +67,22 @@ public class JoinService {
         return joinRepository.save(result);
     }
 
+    public Join checkChallenge(Long userId, Long challengeId) {
+        Join result = getByNodesIds(userId, challengeId);
+        if (result == null || result.getEndedAt() != null) {
+            return null;
+        }
+        //TODO:
+        // -check if he is in trust days, if yes return null
+        // -check if he is in check days, if yes update lastChecked = lastChecked + 1;
+        int daysBetween = (int) ChronoUnit.DAYS.between(result.getLastChecked(), LocalDate.now());
+        if (daysBetween < 4) {
+            return null; //trust days period -> you cant check now
+        }
+        if (daysBetween < 7) {
+            result.checkChallenge();
+            return joinRepository.save(result);
+        }
+        return endChallenge(userId, challengeId);
+    }
 }

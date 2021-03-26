@@ -95,7 +95,7 @@ public class JoinController {
         }
         Influence influence = influenceService.upsert(influencerId, userId);
 
-        logger.info("Influence relationship created" + influence );
+        logger.info("Influence relationship created" + influence);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -111,6 +111,19 @@ public class JoinController {
                     ", challengeId= " + challengeId +
                     " does not exist or it's already ended. ");
             return ResponseEntity.badRequest().body("Invalid path variables");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+
+    @PutMapping("/check/{userId}-{challengeId}")
+    public ResponseEntity checkChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
+        Join result = joinService.checkChallenge(userId, challengeId);
+        if (result == null) {
+            logger.error("JOINED relationship requested with userId= " + userId +
+                    ", challengeId= " + challengeId +
+                    " is still in trust days or does not exist/it's already ended.");
+            return ResponseEntity.badRequest().body("JOINED relationships cannot be updated right now or does not exist.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
