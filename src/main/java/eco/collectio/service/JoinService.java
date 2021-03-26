@@ -16,6 +16,8 @@ public class JoinService {
     private final UserService userService;
     private final ChallengeService challengeService;
 
+    //TODO: Add Logger
+
     public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService) {
         this.joinRepository = joinRepository;
         this.userService = userService;
@@ -44,7 +46,7 @@ public class JoinService {
                 System.err.println("user or challenge does not exists");
                 return null;
             }
-            Join join = new Join(LocalDate.now(), persistedUser.get(), persistedChallenge.get(), 1);
+            Join join = new Join(LocalDate.now(), persistedUser.get(), persistedChallenge.get());
             return joinRepository.save(join);
         }
         if (result.getEndedAt() != null) {
