@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -28,30 +27,6 @@ public class ReachService {
         this.userService = userService;
     }
 
-
-    public Reach checkCompletedStage(Join join) {
-        int currentWeeks = (int) ChronoUnit.WEEKS.between(join.getStartedAt(), join.getLastChecked());
-        List<Stage> sortedDescStages = stageService.getAllByChallenge(join.getChallenge().getId());
-        if (sortedDescStages == null || sortedDescStages.isEmpty()) {
-            logger.error("Challenge does not have stages");
-            return null;
-        }
-        for (Stage stage : sortedDescStages) {
-            if (currentWeeks == stage.getWeeksCondition()) {
-                hideActiveBadge(join);
-                return upsert(join.getUser().getId(), stage.getId());
-            }
-        }
-        return null;
-    }
-
-    private void hideActiveBadge(Join join) {
-        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getId(), join.getChallenge().getId());
-        if (updatedReach != null && updatedReach.getShow()) {
-            logger.error("Reach updated fail");
-        }
-    }
-
     private Reach upsert(Long userId, Long stageId) {
         Reach result = reachRepository.findByNodesIds(userId, stageId);
         if (result == null) {
@@ -65,5 +40,28 @@ public class ReachService {
         }
         result.reachievedStage();
         return reachRepository.save(result);
+    }
+
+    public Reach checkCompletedStage(Join join) {
+        int currentWeeks = (int) ChronoUnit.WEEKS.between(join.getStartedAt(), join.getLastChecked());
+        List<Stage> orderedStagesDesc = stageService.getAllByChallengeId(join.getChallenge().getId());
+        if (orderedStagesDesc == null || orderedStagesDesc.isEmpty()) {
+            logger.error("Challenge does not have stages");
+            return null;
+        }
+        for (Stage stage : orderedStagesDesc) {
+            if (currentWeeks == stage.getWeeksCondition()) {
+                hideActiveBadge(join);
+                return upsert(join.getUser().getId(), stage.getId());
+            }
+        }
+        return null;
+    }
+
+    private void hideActiveBadge(Join join) {
+        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getId(), join.getChallenge().getId());
+        if (updatedReach != null && updatedReach.getShow()) {
+            logger.error("Reach updated fail");
+        }
     }
 }

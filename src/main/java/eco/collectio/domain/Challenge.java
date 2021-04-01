@@ -41,12 +41,12 @@ public class Challenge {
 
         Challenge challenge = (Challenge) o;
 
-        return title != null ? title.equals(challenge.title) : challenge.title == null;
+        return title.equals(challenge.title);
     }
 
     @Override
     public int hashCode() {
-        return title != null ? title.hashCode() : 0;
+        return title.hashCode();
     }
 
     @Override

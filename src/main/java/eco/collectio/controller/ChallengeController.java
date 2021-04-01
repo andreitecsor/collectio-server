@@ -23,7 +23,7 @@ public class ChallengeController {
 
     @GetMapping("")
     public ResponseEntity get() {
-        List<Challenge> result = service.get();
+        List<Challenge> result = service.getAll();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -31,11 +31,11 @@ public class ChallengeController {
     }
 
     @PostMapping("")
-    public ResponseEntity create(@RequestBody Challenge challenge) {
+    public ResponseEntity add(@RequestBody Challenge challenge) {
         Challenge result = service.create(challenge);
         if (result == null) {
-            logger.error("challenge attributes does not match the default or have null values");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request body");
+            logger.error("challenge already exists or its attributes does not match the default or have null values");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request body or challenge may already exist");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }

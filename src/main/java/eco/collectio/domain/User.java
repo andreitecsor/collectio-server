@@ -16,6 +16,8 @@ public class User implements Serializable {
     @Property(name = "name")
     private String name;
 
+    //email -> this is how the equals method will compare objects.
+
     public User(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -28,7 +30,6 @@ public class User implements Serializable {
     public String getName() {
         return name;
     }
-
 
     @Override
     public String toString() {

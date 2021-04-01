@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity create(@RequestBody User user) {
+    public ResponseEntity add(@RequestBody User user) {
         User result = userService.create(user);
         if (result == null) {
             logger.error("user attributes does not match the default or have null values");

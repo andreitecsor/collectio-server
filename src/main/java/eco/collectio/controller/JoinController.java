@@ -30,7 +30,7 @@ public class JoinController {
      */
     @GetMapping("")
     public ResponseEntity get() {
-        List<Join> result = joinService.get();
+        List<Join> result = joinService.getAll();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
@@ -66,8 +66,8 @@ public class JoinController {
      * If exists and endedAt is not null -> reset startedAt, lastChecked, endedAt and increment timesTried
      */
     @PutMapping("/{userId}-{challengeId}")
-    public ResponseEntity upsert(@PathVariable Long userId, @PathVariable Long challengeId) {
-        Join result = joinService.startRestartChallenge(userId, challengeId);
+    public ResponseEntity add(@PathVariable Long userId, @PathVariable Long challengeId) {
+        Join result = joinService.upsert(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             logger.error(" JOINED relationship requested with userId= " + userId +
                     ", challengeId= " + challengeId +
@@ -82,10 +82,10 @@ public class JoinController {
      * If exists and endedAt is not null -> reset startedAt, lastChecked, endedAt and increment timesTried
      */
     @PutMapping("/{userId}-{challengeId}/influenced={influencerId}")
-    public ResponseEntity createByInfluenced(@PathVariable Long userId,
-                                             @PathVariable Long challengeId,
-                                             @PathVariable Long influencerId) {
-        Join result = joinService.startRestartChallenge(userId, challengeId);
+    public ResponseEntity addByInfluenced(@PathVariable Long userId,
+                                          @PathVariable Long challengeId,
+                                          @PathVariable Long influencerId) {
+        Join result = joinService.upsert(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             logger.error("JOINED relationship requested with userId= " + userId +
                     ", challengeId= " + challengeId +
@@ -101,7 +101,6 @@ public class JoinController {
 
     /**
      * End JOINED relationship based on userId and challengeId if exists and endedAt is null;
-     * Else does nothing.
      */
     @PutMapping("/end/{userId}-{challengeId}")
     public ResponseEntity endChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
@@ -115,10 +114,12 @@ public class JoinController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
+    /**
+     * Check JOINED relationship based on userId and challengeId;
+     */
     @PutMapping("/check/{userId}-{challengeId}")
     public ResponseEntity checkChallenge(@PathVariable Long userId, @PathVariable Long challengeId) {
-        Join result = joinService.checkChallenge(userId, challengeId);
+        Join result = joinService.checkChallengeActivity(userId, challengeId);
         if (result == null) {
             logger.error("JOINED relationship requested with userId= " + userId +
                     ", challengeId= " + challengeId +

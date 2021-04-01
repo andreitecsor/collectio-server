@@ -20,11 +20,11 @@ public class Influence {
 
     private LocalDate lastTime;
 
-    public Influence(User whoInfluenced, User whoIsInfluenced, Integer timesInfluenced, LocalDate when) {
+    public Influence(User whoInfluenced, User whoIsInfluenced) {
         this.whoInfluenced = whoInfluenced;
         this.whoIsInfluenced = whoIsInfluenced;
-        this.timesInfluenced = timesInfluenced;
-        this.lastTime = when;
+        this.timesInfluenced = 1;
+        this.lastTime = LocalDate.now();
     }
 
     public Long getId() {

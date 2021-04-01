@@ -27,8 +27,8 @@ public class Join {
     @EndNode
     private Challenge challenge;
 
-    public Join(LocalDate startedAt, User user, Challenge challenge) {
-        this.startedAt = startedAt;
+    public Join(User user, Challenge challenge) {
+        this.startedAt = LocalDate.now();
         this.lastChecked = this.startedAt;
         this.user = user;
         this.challenge = challenge;

@@ -12,10 +12,9 @@ public class Stage {
 
     private String description;
 
-    private  int weeksCondition;
+    private int weeksCondition;
 
     //private String badgeUrl;
-
 
     public Stage(String description, int weeksCondition) {
         this.description = description;

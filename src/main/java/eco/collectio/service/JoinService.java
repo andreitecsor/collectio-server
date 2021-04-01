@@ -29,19 +29,19 @@ public class JoinService {
         this.reachService = reachService;
     }
 
-    public List<Join> get() {
+    public List<Join> getAll() {
         return joinRepository.findAll();
-    }
-
-    public Join getByNodesIds(Long userId, Long challengeId) {
-        return joinRepository.findByNodesIds(userId, challengeId);
     }
 
     public List<Join> getAllActives(Long userId) {
         return joinRepository.findAllActives(userId);
     }
 
-    public Join startRestartChallenge(Long userId, Long challengeId) {
+    public Join getByNodesIds(Long userId, Long challengeId) {
+        return joinRepository.findByNodesIds(userId, challengeId);
+    }
+
+    public Join upsert(Long userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null) {
             Optional<User> persistedUser = userService.getById(userId);
@@ -50,7 +50,7 @@ public class JoinService {
                 logger.error("user(id=" + userId + ") or challenge(id=" + challengeId + ") does not exists");
                 return null;
             }
-            Join join = new Join(LocalDate.now(), persistedUser.get(), persistedChallenge.get());
+            Join join = new Join(persistedUser.get(), persistedChallenge.get());
             return joinRepository.save(join);
         }
         if (result.getEndedAt() != null) {
@@ -70,7 +70,7 @@ public class JoinService {
         return joinRepository.save(result);
     }
 
-    public Join checkChallenge(Long userId, Long challengeId) {
+    public Join checkChallengeActivity(Long userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             return null;

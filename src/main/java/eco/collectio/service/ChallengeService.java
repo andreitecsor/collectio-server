@@ -9,36 +9,25 @@ import java.util.Optional;
 
 @Service
 public class ChallengeService {
-    private final ChallengeRepository repository;
+    private final ChallengeRepository challengeRepository;
 
     public ChallengeService(ChallengeRepository repository) {
-        this.repository = repository;
+        this.challengeRepository = repository;
     }
 
-    /**
-     * @return all challenges from database
-     */
-    public List<Challenge> get() {
-        return repository.findAll();
+    public List<Challenge> getAll() {
+        return challengeRepository.findAll();
     }
 
-    /**
-     * @param id challenge's unique id
-     * @return specific user from database via id
-     */
     public Optional<Challenge> getById(Long id) {
-        return repository.findById(id);
+        return challengeRepository.findById(id);
     }
 
-    /**
-     * @param challenge's properties without id
-     * @return the new challenge added or null if: challenge is null or it's data types are incorrect
-     */
     public Challenge create(Challenge challenge) {
-        //TODO:Should check if the challenge already exists based on title.
-        if (challenge == null || challenge.getTitle() == null) {
+        Challenge sameTitleChallenge = challengeRepository.findByTitle(challenge.getTitle());
+        if (challenge.getTitle() == null || sameTitleChallenge.equals(challenge)) {
             return null;
         }
-        return repository.save(challenge);
+        return challengeRepository.save(challenge);
     }
 }

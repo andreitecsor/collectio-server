@@ -15,7 +15,7 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public List<Stage> getAllByChallenge(Long challengeId) {
+    public List<Stage> getAllByChallengeId(Long challengeId) {
         return stageRepository.findAllByChallenge(challengeId);
     }
 
