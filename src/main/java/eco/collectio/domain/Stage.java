@@ -4,27 +4,21 @@ import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @NodeEntity
 public class Stage {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String rank;
+    private String description;
 
-    private int weeksCondition;
+    private  int weeksCondition;
 
-    private LocalDate localDate;
-
-//    private String description;
-//    private String badgeUrl;
+    //private String badgeUrl;
 
 
-    public Stage(String rank, int weeksCondition) {
-        this.rank = rank;
+    public Stage(String description, int weeksCondition) {
+        this.description = description;
         this.weeksCondition = weeksCondition;
     }
 
@@ -32,8 +26,8 @@ public class Stage {
         return id;
     }
 
-    public String getRank() {
-        return rank;
+    public String getDescription() {
+        return description;
     }
 
     public int getWeeksCondition() {

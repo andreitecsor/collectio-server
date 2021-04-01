@@ -87,6 +87,10 @@ public class Join {
 
     public void checkChallenge() {
         this.lastChecked = this.lastChecked.plusDays(7);
+        int weeks = (int) ChronoUnit.WEEKS.between(this.startedAt, this.lastChecked);
+        if (weeks > this.bestRecord) {
+            this.bestRecord = weeks;
+        }
     }
 
     @Override

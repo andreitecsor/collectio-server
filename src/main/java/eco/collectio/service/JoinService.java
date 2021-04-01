@@ -1,6 +1,5 @@
 package eco.collectio.service;
 
-import eco.collectio.controller.ChallengeController;
 import eco.collectio.domain.Challenge;
 import eco.collectio.domain.Join;
 import eco.collectio.domain.User;
@@ -19,13 +18,15 @@ public class JoinService {
     private final JoinRepository joinRepository;
     private final UserService userService;
     private final ChallengeService challengeService;
+    private final ReachService reachService;
 
     private Logger logger = LoggerFactory.getLogger(JoinService.class);
 
-    public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService) {
+    public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService, ReachService reachService) {
         this.joinRepository = joinRepository;
         this.userService = userService;
         this.challengeService = challengeService;
+        this.reachService = reachService;
     }
 
     public List<Join> get() {
@@ -40,14 +41,13 @@ public class JoinService {
         return joinRepository.findAllActives(userId);
     }
 
-
     public Join startRestartChallenge(Long userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null) {
             Optional<User> persistedUser = userService.getById(userId);
             Optional<Challenge> persistedChallenge = challengeService.getById(challengeId);
             if (!persistedUser.isPresent() || !persistedChallenge.isPresent()) {
-                logger.error("user(id=" + userId+ ") or challenge(id=" + challengeId+ ") does not exists");
+                logger.error("user(id=" + userId + ") or challenge(id=" + challengeId + ") does not exists");
                 return null;
             }
             Join join = new Join(LocalDate.now(), persistedUser.get(), persistedChallenge.get());
@@ -81,6 +81,7 @@ public class JoinService {
         }
         if (daysBetween < 7) {
             result.checkChallenge();
+            reachService.checkCompletedStage(result);
             return joinRepository.save(result);
         }
         return endChallenge(userId, challengeId);
