@@ -71,7 +71,7 @@ public class JoinController {
         if (result == null || result.getEndedAt() != null) {
             logger.error(" JOINED relationship requested with userId= " + userId +
                     ", challengeId= " + challengeId +
-                    " does not exist or it's already ended. ");
+                    " does not exist or it's still active ");
             return ResponseEntity.badRequest().body("Invalid path variables");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
@@ -90,7 +90,7 @@ public class JoinController {
             logger.error("JOINED relationship requested with userId= " + userId +
                     ", challengeId= " + challengeId +
                     ", influencerId= " + influencerId +
-                    " does not exist or it's already ended. ");
+                    " does not exist or it's still active. ");
             return ResponseEntity.badRequest().body("Invalid path variables");
         }
         Influence influence = influenceService.upsert(influencerId, userId);
