@@ -19,6 +19,14 @@ public class UserService {
         return repository.findAll();
     }
 
+    public List<User> getAllFollowers(Long id) {
+        return repository.findAllFollowers(id);
+    }
+
+    public List<User> getAllFollowings(Long id) {
+        return repository.findAllFollowings(id);
+    }
+
     public Optional<User> getById(Long id) {
         return repository.findById(id);
     }
