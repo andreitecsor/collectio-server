@@ -18,18 +18,18 @@ public class Follow {
 
     private int timesFollowed;
 
-    private LocalDateTime firstTime;
+    private LocalDateTime firstTimeFollowed;
 
-    private LocalDateTime lastTime;
+    private LocalDateTime lastTimeFollowed;
 
-    private LocalDateTime lastEnded;
+    private LocalDateTime lastTimeUnfollowed;
 
     public Follow(User userWhoFollows, User userWhoIsFollowed) {
         this.userWhoFollows = userWhoFollows;
         this.userWhoIsFollowed = userWhoIsFollowed;
-        this.firstTime = LocalDateTime.now();
-        this.lastTime = this.firstTime;
-        this.lastEnded = null;
+        this.firstTimeFollowed = LocalDateTime.now();
+        this.lastTimeFollowed = this.firstTimeFollowed;
+        this.lastTimeUnfollowed = null;
         this.timesFollowed = 1;
     }
 
@@ -49,25 +49,25 @@ public class Follow {
         return timesFollowed;
     }
 
-    public LocalDateTime getFirstTime() {
-        return firstTime;
+    public LocalDateTime getFirstTimeFollowed() {
+        return firstTimeFollowed;
     }
 
-    public LocalDateTime getLastTime() {
-        return lastTime;
+    public LocalDateTime getLastTimeFollowed() {
+        return lastTimeFollowed;
     }
 
-    public LocalDateTime getLastEnded() {
-        return lastEnded;
+    public LocalDateTime getLastTimeUnfollowed() {
+        return lastTimeUnfollowed;
     }
 
     public void unfollow() {
-        this.lastEnded = LocalDateTime.now();
+        this.lastTimeUnfollowed = LocalDateTime.now();
     }
 
     public void followAgain() {
-        this.lastTime = LocalDateTime.now();
-        this.lastEnded = null;
+        this.lastTimeFollowed = LocalDateTime.now();
+        this.lastTimeUnfollowed = null;
         this.timesFollowed++;
     }
 }

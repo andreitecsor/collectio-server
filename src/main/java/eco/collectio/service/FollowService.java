@@ -33,7 +33,7 @@ public class FollowService {
             Follow newFollowRelation = new Follow(userWhoFollows.get(), userWhoIsFollowed.get());
             return followRepository.save(newFollowRelation);
         }
-        if (result.getLastEnded() != null) {
+        if (result.getLastTimeUnfollowed() != null) {
             result.followAgain();
             return followRepository.save(result);
         }
@@ -43,7 +43,7 @@ public class FollowService {
 
     public Follow unfollow(Long idUserWhoFollows, Long idUserWhoIsFollowed) {
         Follow result = followRepository.findByNodesIds(idUserWhoFollows, idUserWhoIsFollowed);
-        if (result == null || result.getLastTime() != null) {
+        if (result == null || result.getLastTimeUnfollowed() != null) {
             logger.error("The specific FOLLOWS relation does not exists or it's already ended");
             return null;
         }
