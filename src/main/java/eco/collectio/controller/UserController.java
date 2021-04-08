@@ -21,10 +21,27 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("")
     public ResponseEntity get() {
         List<User> result = userService.get();
+        if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/followers/{id}")
+    public ResponseEntity getFollowers(@PathVariable Long id) {
+        List<User> result = userService.getAllFollowers(id);
+        if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/followings/{id}")
+    public ResponseEntity getFollowings(@PathVariable Long id) {
+        List<User> result = userService.getAllFollowings(id);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
