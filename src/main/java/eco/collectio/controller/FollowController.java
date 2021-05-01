@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("follow")
+@RequestMapping("/api/follow")
 public class FollowController {
     private final FollowService followService;
     private Logger logger = LoggerFactory.getLogger(FollowController.class);

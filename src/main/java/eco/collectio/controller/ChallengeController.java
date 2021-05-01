@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/challenge")
+@RequestMapping("/api/challenge")
 public class ChallengeController {
     private final ChallengeService service;
     private Logger logger = LoggerFactory.getLogger(ChallengeController.class);

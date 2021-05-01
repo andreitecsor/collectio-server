@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/influenced")
+@RequestMapping("/api/influenced")
 public class InfluenceController {
     private final InfluenceService service;
     private Logger logger = LoggerFactory.getLogger(InfluenceController.class);

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("joined")
+@RequestMapping("/api/joined")
 public class JoinController {
     private final JoinService joinService;
     private final InfluenceService influenceService;
