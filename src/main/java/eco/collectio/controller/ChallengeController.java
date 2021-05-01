@@ -4,6 +4,7 @@ import eco.collectio.domain.Challenge;
 import eco.collectio.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,9 @@ import java.util.List;
 @RequestMapping("/challenge")
 public class ChallengeController {
     private final ChallengeService service;
-
     private Logger logger = LoggerFactory.getLogger(ChallengeController.class);
 
+    @Autowired
     public ChallengeController(ChallengeService service) {
         this.service = service;
     }

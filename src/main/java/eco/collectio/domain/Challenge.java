@@ -1,9 +1,15 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @NodeEntity
 public class Challenge {
     @Id
@@ -15,24 +21,6 @@ public class Challenge {
 
     @Relationship(type = "HAS", direction = Relationship.OUTGOING)
     private List<Stage> stages;
-
-    public Challenge(Long id, String title, List<Stage> stages) {
-        this.id = id;
-        this.title = title;
-        this.stages = stages;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public List<Stage> getStages() {
-        return stages;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -47,13 +35,5 @@ public class Challenge {
     @Override
     public int hashCode() {
         return title.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Challenge{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
     }
 }

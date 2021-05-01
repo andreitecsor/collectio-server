@@ -1,9 +1,15 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @RelationshipEntity(type = "REACHED")
 public class Reach {
     @Id
@@ -28,30 +34,6 @@ public class Reach {
         this.completedAt = LocalDate.now();
         this.show = true;
         this.timesReached = 1;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getCompletedAt() {
-        return completedAt;
-    }
-
-    public Boolean getShow() {
-        return show;
-    }
-
-    public Integer getTimesReached() {
-        return timesReached;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 
     public void reachievedStage() {

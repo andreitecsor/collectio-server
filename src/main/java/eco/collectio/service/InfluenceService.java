@@ -5,6 +5,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.InfluenceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,9 @@ import java.util.Optional;
 public class InfluenceService {
     private final InfluenceRepository influenceRepository;
     private final UserService userService;
-
     private Logger logger = LoggerFactory.getLogger(InfluenceService.class);
 
+    @Autowired
     public InfluenceService(InfluenceRepository repository, UserService userService) {
         this.influenceRepository = repository;
         this.userService = userService;

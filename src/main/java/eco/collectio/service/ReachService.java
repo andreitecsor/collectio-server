@@ -7,6 +7,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.ReachRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -18,9 +19,9 @@ public class ReachService {
     private final ReachRepository reachRepository;
     private final StageService stageService;
     private final UserService userService;
-
     private Logger logger = LoggerFactory.getLogger(ReachService.class);
 
+    @Autowired
     public ReachService(ReachRepository reachRepository, StageService stageService, UserService userService) {
         this.reachRepository = reachRepository;
         this.stageService = stageService;

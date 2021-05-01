@@ -4,6 +4,7 @@ import eco.collectio.domain.Influence;
 import eco.collectio.service.InfluenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +16,9 @@ import java.util.List;
 @RequestMapping("/influenced")
 public class InfluenceController {
     private final InfluenceService service;
-
     private Logger logger = LoggerFactory.getLogger(InfluenceController.class);
 
+    @Autowired
     public InfluenceController(InfluenceService service) {
         this.service = service;
     }

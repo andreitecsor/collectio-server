@@ -1,10 +1,16 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @RelationshipEntity(type = "JOINED")
 public class Join {
     @Id
@@ -36,38 +42,6 @@ public class Join {
         this.bestRecord = 0;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getStartedAt() {
-        return startedAt;
-    }
-
-    public LocalDate getEndedAt() {
-        return endedAt;
-    }
-
-    public LocalDate getLastChecked() {
-        return lastChecked;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Challenge getChallenge() {
-        return challenge;
-    }
-
-    public Integer getTimesTried() {
-        return timesTried;
-    }
-
-    public Integer getBestRecord() {
-        return bestRecord;
-    }
-
     public void restartChallenge() {
         if (this.endedAt != null) {
             this.startedAt = LocalDate.now();
@@ -91,20 +65,6 @@ public class Join {
         if (weeks > this.bestRecord) {
             this.bestRecord = weeks;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Join{" +
-                "id=" + id +
-                ", startedAt=" + startedAt +
-                ", endedAt=" + endedAt +
-                ", lastChecked=" + lastChecked +
-                ", timesTried=" + timesTried +
-                ", bestRecord=" + bestRecord +
-                ", user=" + user +
-                ", challenge=" + challenge +
-                '}';
     }
 
 

@@ -1,9 +1,15 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @RelationshipEntity(type = "FOLLOWS")
 public class Follow {
     @GeneratedValue
@@ -31,34 +37,6 @@ public class Follow {
         this.lastTimeFollowed = this.firstTimeFollowed;
         this.lastTimeUnfollowed = null;
         this.timesFollowed = 1;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public User getUserWhoFollows() {
-        return userWhoFollows;
-    }
-
-    public User getUserWhoIsFollowed() {
-        return userWhoIsFollowed;
-    }
-
-    public int getTimesFollowed() {
-        return timesFollowed;
-    }
-
-    public LocalDateTime getFirstTimeFollowed() {
-        return firstTimeFollowed;
-    }
-
-    public LocalDateTime getLastTimeFollowed() {
-        return lastTimeFollowed;
-    }
-
-    public LocalDateTime getLastTimeUnfollowed() {
-        return lastTimeUnfollowed;
     }
 
     public void unfollow() {

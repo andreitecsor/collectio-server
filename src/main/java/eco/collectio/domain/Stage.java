@@ -1,9 +1,15 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @NodeEntity
 public class Stage {
     @Id
@@ -15,19 +21,6 @@ public class Stage {
     private int weeksCondition;
 
     //private String badgeUrl;
-
-    public Stage(String description, int weeksCondition) {
-        this.description = description;
-        this.weeksCondition = weeksCondition;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
     public int getWeeksCondition() {
         return weeksCondition;

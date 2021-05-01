@@ -5,6 +5,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.FollowRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,9 +14,9 @@ import java.util.Optional;
 public class FollowService {
     private final FollowRepository followRepository;
     private final UserService userService;
-
     private Logger logger = LoggerFactory.getLogger(FollowService.class);
 
+    @Autowired
     public FollowService(FollowRepository followRepository, UserService userService) {
         this.followRepository = followRepository;
         this.userService = userService;

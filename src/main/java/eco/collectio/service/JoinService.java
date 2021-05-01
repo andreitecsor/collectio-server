@@ -6,6 +6,7 @@ import eco.collectio.domain.User;
 import eco.collectio.repository.JoinRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,9 +20,9 @@ public class JoinService {
     private final UserService userService;
     private final ChallengeService challengeService;
     private final ReachService reachService;
-
     private Logger logger = LoggerFactory.getLogger(JoinService.class);
 
+    @Autowired
     public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService, ReachService reachService) {
         this.joinRepository = joinRepository;
         this.userService = userService;

@@ -4,6 +4,7 @@ import eco.collectio.domain.Follow;
 import eco.collectio.service.FollowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("follow")
 public class FollowController {
     private final FollowService followService;
-
     private Logger logger = LoggerFactory.getLogger(FollowController.class);
 
+    @Autowired
     public FollowController(FollowService followService) {
         this.followService = followService;
     }

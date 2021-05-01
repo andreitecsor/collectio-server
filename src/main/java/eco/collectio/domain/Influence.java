@@ -1,9 +1,15 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @RelationshipEntity(type = "INFLUENCED")
 public class Influence {
     @Id
@@ -27,39 +33,8 @@ public class Influence {
         this.lastTime = LocalDate.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public User getWhoInfluenced() {
-        return whoInfluenced;
-    }
-
-    public User getWhoIsInfluenced() {
-        return whoIsInfluenced;
-    }
-
-    public Integer getTimesInfluenced() {
-        return timesInfluenced;
-    }
-
-    public LocalDate getLastTime() {
-        return lastTime;
-    }
-
     public void increaseInfluence() {
         this.timesInfluenced += 1;
         this.lastTime = LocalDate.now();
-    }
-
-    @Override
-    public String toString() {
-        return "Influence{" +
-                "id=" + id +
-                ", whoInfluenced=" + whoInfluenced +
-                ", whoIsInfluenced=" + whoIsInfluenced +
-                ", timesInfluenced=" + timesInfluenced +
-                ", lastTime=" + lastTime +
-                '}';
     }
 }
