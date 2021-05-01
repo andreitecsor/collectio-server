@@ -33,6 +33,10 @@ public class UserService {
         return repository.findById(id);
     }
 
+    public Optional<User> getByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
     public User create(User user) {
         //TODO:Should check if the user already exists based on email.
         if (user == null || user.getName() == null) {

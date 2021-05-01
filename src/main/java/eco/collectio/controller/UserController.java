@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -26,6 +27,15 @@ public class UserController {
     public ResponseEntity get() {
         List<User> result = userService.get();
         if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity getByEmail(@PathVariable String email) {
+        Optional<User> result = userService.getByEmail(email);
+        if (!result.isPresent()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().body(result);

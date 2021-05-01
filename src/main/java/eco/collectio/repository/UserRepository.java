@@ -16,6 +16,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     @Override
     Optional<User> findById(Long id);
 
+    Optional<User> findByEmail(String email);
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
             "WHERE id(followed) = $userIdWhoIsFollowed AND NOT EXISTS(relation.lastTimeUnfollowed)" +
