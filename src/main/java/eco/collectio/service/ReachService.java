@@ -1,9 +1,7 @@
 package eco.collectio.service;
 
-import eco.collectio.domain.Join;
-import eco.collectio.domain.Reach;
-import eco.collectio.domain.Stage;
-import eco.collectio.domain.User;
+import eco.collectio.domain.*;
+import eco.collectio.exception.InvalidPostException;
 import eco.collectio.repository.ReachRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +17,15 @@ public class ReachService {
     private final ReachRepository reachRepository;
     private final StageService stageService;
     private final UserService userService;
+    private final PostService postService;
     private Logger logger = LoggerFactory.getLogger(ReachService.class);
 
     @Autowired
-    public ReachService(ReachRepository reachRepository, StageService stageService, UserService userService) {
+    public ReachService(ReachRepository reachRepository, StageService stageService, UserService userService, PostService postService) {
         this.reachRepository = reachRepository;
         this.stageService = stageService;
         this.userService = userService;
+        this.postService = postService;
     }
 
     private Reach upsert(Long userId, Long stageId) {
@@ -37,10 +37,34 @@ public class ReachService {
                 return null;
             }
             Reach newReach = new Reach(persistedUser.get(), persistedStage.get());
-            return reachRepository.save(newReach);
+            try {
+                createAwardPost(newReach.getUser(), newReach.getStage());
+                return reachRepository.save(newReach);
+            } catch (InvalidPostException e) {
+                e.printStackTrace();
+            }
         }
+        try {
+            return updateReached(result);
+        } catch (InvalidPostException e) {
+            e.printStackTrace();
+        }
+        logger.error(result.toString() + " is still active");
+        return null;
+    }
+
+    private Reach updateReached(Reach result) throws InvalidPostException {
         result.reachievedStage();
+        createAwardPost(result.getUser(), result.getStage());
         return reachRepository.save(result);
+    }
+
+    private void createAwardPost(User user, Stage stage) throws InvalidPostException {
+        Challenge challenge = stageService.findChallenge(stage);
+        postService.create(new Post.PostBuilder(PostType.AWARD, user)
+                .setStage(stage)
+                .setChallenge(challenge)
+                .build());
     }
 
     public Reach checkCompletedStage(Join join) {

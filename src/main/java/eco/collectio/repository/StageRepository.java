@@ -1,5 +1,6 @@
 package eco.collectio.repository;
 
+import eco.collectio.domain.Challenge;
 import eco.collectio.domain.Stage;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -18,4 +19,10 @@ public interface StageRepository extends Neo4jRepository<Stage, Long> {
 
     @Override
     Optional<Stage> findById(Long aLong);
+
+    @Query("MATCH (challenge:Challenge)-[:HAS]->(stage:Stage) " +
+            "WHERE id(stage) = $stageId " +
+            "RETURN challenge " +
+            "LIMIT 1")
+    Challenge findChallenge(Long stageId);
 }

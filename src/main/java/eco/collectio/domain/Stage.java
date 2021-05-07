@@ -18,7 +18,7 @@ public class Stage {
 
     private String description;
 
-    private int weeksCondition;
+    private Integer weeksCondition;
 
     //private String badgeUrl;
 

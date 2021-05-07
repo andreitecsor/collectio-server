@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +24,9 @@ public class User implements Serializable {
     private String displayName;
 
     private String email;
+
+    @Relationship(type = "GENERATES", direction = Relationship.OUTGOING)
+    private List<Post> posts = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
