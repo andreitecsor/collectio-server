@@ -2,6 +2,8 @@ package eco.collectio.service;
 
 import eco.collectio.domain.User;
 import eco.collectio.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository repository;
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository repository) {
@@ -38,8 +41,11 @@ public class UserService {
     }
 
     public User create(User user) {
-        //TODO:Should check if the user already exists based on email.
-        if (user == null || user.getName() == null) {
+        if (user == null || user.getEmail() == null || user.getDisplayName() == null) {
+            return null;
+        }
+        if (getByEmail(user.getEmail()).isPresent()) {
+            logger.error("Already existing email address");
             return null;
         }
         return repository.save(user);
