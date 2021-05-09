@@ -1,7 +1,10 @@
 package eco.collectio.service;
 
 import eco.collectio.domain.Follow;
+import eco.collectio.domain.Post;
+import eco.collectio.domain.PostType;
 import eco.collectio.domain.User;
+import eco.collectio.exception.InvalidPostException;
 import eco.collectio.repository.FollowRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +17,14 @@ import java.util.Optional;
 public class FollowService {
     private final FollowRepository followRepository;
     private final UserService userService;
+    private final PostService postService;
     private Logger logger = LoggerFactory.getLogger(FollowService.class);
 
     @Autowired
-    public FollowService(FollowRepository followRepository, UserService userService) {
+    public FollowService(FollowRepository followRepository, UserService userService, PostService postService) {
         this.followRepository = followRepository;
         this.userService = userService;
+        this.postService = postService;
     }
 
     public Follow upsert(Long idUserWhoFollows, Long idUserWhoIsFollowed) {
@@ -32,13 +37,38 @@ public class FollowService {
                 return null;
             }
             Follow newFollowRelation = new Follow(userWhoFollows.get(), userWhoIsFollowed.get());
-            return followRepository.save(newFollowRelation);
+            try {
+                createFollowPost(newFollowRelation.getUserWhoFollows(), newFollowRelation.getUserWhoIsFollowed());
+                return followRepository.save(newFollowRelation);
+            } catch (InvalidPostException e) {
+                e.printStackTrace();
+            }
         }
-        if (result.getLastTimeUnfollowed() != null) {
-            result.followAgain();
-            return followRepository.save(result);
+
+        Follow followUpdate = followUpdate(result);
+        if (followUpdate != null) {
+            return followUpdate;
         }
         logger.error(result.toString() + " is still active");
+        return null;
+    }
+
+    private void createFollowPost(User userWhoFollows, User userWhoIsFollowed) throws InvalidPostException {
+        postService.upsert(new Post.PostBuilder(PostType.FOLLOW, userWhoFollows)
+                .setFollowing(userWhoIsFollowed)
+                .build());
+    }
+
+    private Follow followUpdate(Follow result) {
+        if (result.getLastTimeUnfollowed() != null) {
+            try {
+                result.followAgain();
+                createFollowPost(result.getUserWhoFollows(), result.getUserWhoIsFollowed());
+                return followRepository.save(result);
+            } catch (InvalidPostException e) {
+                e.printStackTrace();
+            }
+        }
         return null;
     }
 
@@ -48,6 +78,14 @@ public class FollowService {
             logger.error("The specific FOLLOWS relation does not exists or it's already ended");
             return null;
         }
+
+        Optional<Post> optionalPost = postService.getPostByFollowerIdAndFollowingId(idUserWhoFollows, idUserWhoIsFollowed);
+        if (!optionalPost.isPresent()) {
+            return null;
+        }
+        Post followPost = optionalPost.get();
+        followPost.makeUnavailable();
+        postService.upsert(followPost);
         result.unfollow();
         return followRepository.save(result);
     }

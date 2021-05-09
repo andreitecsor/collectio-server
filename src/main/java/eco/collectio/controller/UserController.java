@@ -25,6 +25,7 @@ public class UserController {
     }
 
     @GetMapping("")
+    @ResponseBody
     public ResponseEntity get() {
         List<User> result = userService.get();
         if (result == null) {

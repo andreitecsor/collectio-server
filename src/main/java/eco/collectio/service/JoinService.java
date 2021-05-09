@@ -1,8 +1,7 @@
 package eco.collectio.service;
 
-import eco.collectio.domain.Challenge;
-import eco.collectio.domain.Join;
-import eco.collectio.domain.User;
+import eco.collectio.domain.*;
+import eco.collectio.exception.InvalidPostException;
 import eco.collectio.repository.JoinRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +19,16 @@ public class JoinService {
     private final UserService userService;
     private final ChallengeService challengeService;
     private final ReachService reachService;
+    private final PostService postService;
     private Logger logger = LoggerFactory.getLogger(JoinService.class);
 
     @Autowired
-    public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService, ReachService reachService) {
+    public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService, ReachService reachService, PostService postService) {
         this.joinRepository = joinRepository;
         this.userService = userService;
         this.challengeService = challengeService;
         this.reachService = reachService;
+        this.postService = postService;
     }
 
     public List<Join> getAll() {
@@ -52,14 +53,38 @@ public class JoinService {
                 return null;
             }
             Join join = new Join(persistedUser.get(), persistedChallenge.get());
-            return joinRepository.save(join);
+            try {
+                createChallengePost(join.getUser(), join.getChallenge());
+                return joinRepository.save(join);
+            } catch (InvalidPostException e) {
+                e.printStackTrace();
+            }
         }
-        if (result.getEndedAt() != null) {
-            result.restartChallenge();
-            return joinRepository.save(result);
+        Join joinUpdate = joinUpdate(result);
+        if (joinUpdate != null) {
+            return joinUpdate;
         }
         logger.error(result.toString() + " is still active");
         return null;
+    }
+
+    private Join joinUpdate(Join result) {
+        if (result.getEndedAt() != null) {
+            try {
+                result.restartChallenge();
+                createChallengePost(result.getUser(), result.getChallenge());
+                return joinRepository.save(result);
+            } catch (InvalidPostException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private void createChallengePost(User user, Challenge challenge) throws InvalidPostException {
+        postService.upsert(new Post.PostBuilder(PostType.CHALLENGE, user)
+                .setChallenge(challenge)
+                .build());
     }
 
     public Join endChallenge(Long userId, Long challengeId) {

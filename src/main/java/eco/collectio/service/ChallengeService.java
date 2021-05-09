@@ -27,7 +27,10 @@ public class ChallengeService {
 
     public Challenge create(Challenge challenge) {
         Challenge sameTitleChallenge = challengeRepository.findByTitle(challenge.getTitle());
-        if (challenge.getTitle() == null || sameTitleChallenge.equals(challenge)) {
+        if (challenge.getTitle() == null) {
+            return null;
+        }
+        if (sameTitleChallenge != null && sameTitleChallenge.equals(challenge)) {
             return null;
         }
         return challengeRepository.save(challenge);
