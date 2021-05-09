@@ -82,7 +82,7 @@ public class JoinService {
     }
 
     private void createChallengePost(User user, Challenge challenge) throws InvalidPostException {
-        postService.create(new Post.PostBuilder(PostType.CHALLENGE, user)
+        postService.upsert(new Post.PostBuilder(PostType.CHALLENGE, user)
                 .setChallenge(challenge)
                 .build());
     }

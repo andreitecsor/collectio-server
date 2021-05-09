@@ -1,6 +1,7 @@
 package eco.collectio.domain;
 
 import eco.collectio.exception.InvalidPostException;
+import lombok.Data;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -8,6 +9,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.time.LocalDateTime;
 
+@Data
 @NodeEntity
 public class Post {
     @Id
@@ -19,62 +21,20 @@ public class Post {
 
     private PostType type;
     private LocalDateTime createdAt;
-
+    private Boolean isVisible;
 
     private Long challengeId;
-    private String challengeTitle;
-    //private String challengeLogoLink;
-
     private Long stageId;
-    private Integer stageWeeksCondition;
-//    private String badgeLink;
-
     private Long followingId;
-    private String followingName;
 
     private Post(User user) {
         this.user = user;
         this.createdAt = LocalDateTime.now();
+        this.isVisible = true;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public PostType getType() {
-        return type;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Long getChallengeId() {
-        return challengeId;
-    }
-
-    public String getChallengeTitle() {
-        return challengeTitle;
-    }
-
-    public Long getStageId() {
-        return stageId;
-    }
-
-    public Integer getStageWeeksCondition() {
-        return stageWeeksCondition;
-    }
-
-    public Long getFollowingId() {
-        return followingId;
-    }
-
-    public String getFollowingName() {
-        return followingName;
+    public void makeUnavailable() {
+        this.isVisible = false;
     }
 
     public static class PostBuilder {
@@ -89,7 +49,6 @@ public class Post {
             if ((this.post.type == PostType.CHALLENGE || this.post.type == PostType.AWARD)
                     && challenge != null) {
                 this.post.challengeId = challenge.getId();
-                this.post.challengeTitle = challenge.getTitle();
                 return this;
             }
             return this;
@@ -98,7 +57,6 @@ public class Post {
         public PostBuilder setStage(Stage stage) {
             if (post.type == PostType.AWARD && stage != null) {
                 post.stageId = stage.getId();
-                post.stageWeeksCondition = stage.getWeeksCondition();
                 return this;
             }
             return this;
@@ -107,7 +65,6 @@ public class Post {
         public PostBuilder setFollowing(User following) {
             if (post.type == PostType.FOLLOW && following != null) {
                 post.followingId = following.getId();
-                post.followingName = following.getDisplayName();
                 return this;
             }
             return this;

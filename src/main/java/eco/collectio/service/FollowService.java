@@ -54,7 +54,7 @@ public class FollowService {
     }
 
     private void createFollowPost(User userWhoFollows, User userWhoIsFollowed) throws InvalidPostException {
-        postService.create(new Post.PostBuilder(PostType.FOLLOW, userWhoFollows)
+        postService.upsert(new Post.PostBuilder(PostType.FOLLOW, userWhoFollows)
                 .setFollowing(userWhoIsFollowed)
                 .build());
     }
@@ -78,6 +78,14 @@ public class FollowService {
             logger.error("The specific FOLLOWS relation does not exists or it's already ended");
             return null;
         }
+
+        Optional<Post> optionalPost = postService.getPostByFollowerIdAndFollowingId(idUserWhoFollows, idUserWhoIsFollowed);
+        if (!optionalPost.isPresent()) {
+            return null;
+        }
+        Post followPost = optionalPost.get();
+        followPost.makeUnavailable();
+        postService.upsert(followPost);
         result.unfollow();
         return followRepository.save(result);
     }

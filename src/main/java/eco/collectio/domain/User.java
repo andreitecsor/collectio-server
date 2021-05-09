@@ -1,5 +1,6 @@
 package eco.collectio.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class User implements Serializable {
 
     private String email;
 
+    @JsonIgnore
     @Relationship(type = "GENERATES", direction = Relationship.OUTGOING)
     private List<Post> posts = new ArrayList<>();
 

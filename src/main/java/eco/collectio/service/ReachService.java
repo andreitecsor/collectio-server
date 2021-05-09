@@ -61,7 +61,7 @@ public class ReachService {
 
     private void createAwardPost(User user, Stage stage) throws InvalidPostException {
         Challenge challenge = stageService.findChallenge(stage);
-        postService.create(new Post.PostBuilder(PostType.AWARD, user)
+        postService.upsert(new Post.PostBuilder(PostType.AWARD, user)
                 .setStage(stage)
                 .setChallenge(challenge)
                 .build());

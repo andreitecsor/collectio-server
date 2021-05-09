@@ -5,6 +5,8 @@ import eco.collectio.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PostService {
     private final PostRepository postRepository;
@@ -14,7 +16,11 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Post create(Post post) {
+    public Optional<Post> getPostByFollowerIdAndFollowingId(Long idUserWhoFollows, Long idUserWhoIsFollowed) {
+        return postRepository.findByUserIdAndFollowingId(idUserWhoFollows,idUserWhoIsFollowed);
+    }
+
+    public Post upsert(Post post) {
         return postRepository.save(post);
     }
 }
