@@ -13,9 +13,9 @@ public interface InfluenceRepository extends Neo4jRepository<Influence, Long> {
     List<Influence> findAll();
 
     @Query("MATCH (whoInfluenced:User)-[relation:INFLUENCED]->(whoIsInfluenced:User) " +
-            " WHERE id(whoInfluenced) = $whoInfluencedId " +
-            " AND id(whoIsInfluenced) = $whoIsInfluencedId " +
+            " WHERE whoInfluenced.uid = $whoInfluencedId " +
+            " AND whoIsInfluenced.uid = $whoIsInfluencedId " +
             " RETURN whoInfluenced,whoIsInfluenced,relation")
-    Influence findByNodesIds(Long whoInfluencedId, Long whoIsInfluencedId);
+    Influence findByNodesIds(String whoInfluencedId, String whoIsInfluencedId);
 
 }

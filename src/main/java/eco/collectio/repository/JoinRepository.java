@@ -13,13 +13,13 @@ public interface JoinRepository extends Neo4jRepository<Join, Long> {
     List<Join> findAll();
 
     @Query("MATCH (user:User)-[relation:JOINED]->(challenge:Challenge) " +
-            "WHERE id(user) = $userId AND id(challenge) = $challengeId " +
+            "WHERE user.uid = $userId AND id(challenge) = $challengeId " +
             "RETURN user,challenge,relation")
-    Join findByNodesIds(Long userId, Long challengeId);
+    Join findByNodesIds(String userId, Long challengeId);
 
     @Query("MATCH (user:User)-[relation:JOINED]->(challenge:Challenge) " +
-            "WHERE id(user) = $userId AND NOT EXISTS(relation.endedAt) " +
+            "WHERE user.uid = $userId AND NOT EXISTS(relation.endedAt) " +
             "RETURN user,challenge,relation")
-    List<Join> findAllActives(Long userId);
+    List<Join> findAllActives(String userId);
 
 }

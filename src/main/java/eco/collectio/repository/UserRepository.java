@@ -9,22 +9,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends Neo4jRepository<User, Long> {
+public interface UserRepository extends Neo4jRepository<User, String> {
     @Override
     List<User> findAll();
 
-    @Override
-    Optional<User> findById(Long id);
+    Optional<User> findByUid(String id);
 
     Optional<User> findByEmail(String email);
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
             "WHERE id(followed) = $userIdWhoIsFollowed AND NOT EXISTS(relation.lastTimeUnfollowed)" +
             "RETURN follows")
-    List<User> findAllFollowers(Long userIdWhoIsFollowed); //People who follow the specific user
+    List<User> findAllFollowers(String userIdWhoIsFollowed); //People who follow the specific user
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
             "WHERE id(follows) = $userIdWhoFollows AND NOT EXISTS(relation.lastTimeUnfollowed) " +
             "RETURN followed")
-    List<User> findAllFollowings(Long userIdWhoFollows); //People that the specific user is following
+    List<User> findAllFollowings(String userIdWhoFollows); //People that the specific user is following
 }

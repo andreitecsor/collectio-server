@@ -25,7 +25,7 @@ public class Post {
 
     private Long challengeId;
     private Long stageId;
-    private Long followingId;
+    private String followingId;
 
     private Post(User user) {
         this.user = user;
@@ -64,7 +64,7 @@ public class Post {
 
         public PostBuilder setFollowing(User following) {
             if (post.type == PostType.FOLLOW && following != null) {
-                post.followingId = following.getId();
+                post.followingId = following.getUid();
                 return this;
             }
             return this;

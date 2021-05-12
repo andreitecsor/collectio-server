@@ -10,34 +10,51 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/challenge")
+@RequestMapping("/api/challenges")
 public class ChallengeController {
-    private final ChallengeService service;
-    private Logger logger = LoggerFactory.getLogger(ChallengeController.class);
+    private final ChallengeService challengeService;
+    private final Logger LOGGER = LoggerFactory.getLogger(ChallengeController.class);
 
     @Autowired
-    public ChallengeController(ChallengeService service) {
-        this.service = service;
+    public ChallengeController(ChallengeService challengeService) {
+        this.challengeService = challengeService;
     }
 
-    @GetMapping("")
-    public ResponseEntity get() {
-        List<Challenge> result = service.getAll();
+    @GetMapping("/all")
+    public ResponseEntity<List<Challenge>> getAll() {
+        List<Challenge> result = challengeService.getAll();
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Challenge> getById(@PathVariable Long id) {
+        Optional<Challenge> result = challengeService.getById(id);
+        return result.map(challenge -> ResponseEntity.ok().body(challenge)).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
     @PostMapping("")
-    public ResponseEntity add(@RequestBody Challenge challenge) {
-        Challenge result = service.create(challenge);
+    public ResponseEntity<Challenge> add(@RequestBody Challenge challenge) {
+        Challenge result = challengeService.create(challenge);
         if (result == null) {
-            logger.error("challenge already exists or its attributes does not match the default or have null values");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request body or challenge may already exist");
+            LOGGER.error("challenge already exists or its attributes does not match the default or have null values");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Challenge> update(@PathVariable Long id, @RequestBody Challenge challenge) {
+        Challenge result = challengeService.update(id, challenge);
+        if (result == null) {
+            LOGGER.error("challenge already exists or its attributes does not match the default or have null values");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
