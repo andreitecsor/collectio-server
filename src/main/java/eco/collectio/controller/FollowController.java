@@ -11,36 +11,38 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping("/api/follow")
+@RequestMapping("/api/follows")
 public class FollowController {
     private final FollowService followService;
-    private Logger logger = LoggerFactory.getLogger(FollowController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(FollowController.class);
 
     @Autowired
     public FollowController(FollowService followService) {
         this.followService = followService;
     }
 
-    @PutMapping("/{idUserWhoFollows}-{idUserWhoIsFollowed}")
-    public ResponseEntity add(@PathVariable Long idUserWhoFollows, @PathVariable Long idUserWhoIsFollowed) {
-        Follow result = followService.upsert(idUserWhoFollows, idUserWhoIsFollowed);
+    @PutMapping("/{idUserWhoFollows}->{idUserWhoIsFollowed}")
+    public ResponseEntity<Follow> follow(@PathVariable String idUserWhoFollows,
+                                         @PathVariable String idUserWhoIsFollowed) {
+        Follow result = followService.follow(idUserWhoFollows, idUserWhoIsFollowed);
         if (result == null || result.getLastTimeUnfollowed() != null) {
-            logger.error(" FOLLOWS relationship requested with idUserWhoFollows= " + idUserWhoFollows +
+            LOGGER.error(" FOLLOWS relationship requested with idUserWhoFollows= " + idUserWhoFollows +
                     ", idUserWhoIsFollowed= " + idUserWhoIsFollowed +
-                    " does not exist or it's still active. ");
-            return ResponseEntity.badRequest().body("Invalid path variables");
+                    " it's still active. ");
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    @PutMapping("/end/{idUserWhoFollows}-{idUserWhoIsFollowed}")
-    public ResponseEntity unfollow(@PathVariable Long idUserWhoFollows, @PathVariable Long idUserWhoIsFollowed) {
+    @PutMapping("/end/{idUserWhoFollows}->{idUserWhoIsFollowed}")
+    public ResponseEntity<Follow> unfollow(@PathVariable String idUserWhoFollows,
+                                           @PathVariable String idUserWhoIsFollowed) {
         Follow result = followService.unfollow(idUserWhoFollows, idUserWhoIsFollowed);
         if (result == null) {
-            logger.error(" FOLLOWS relationship requested with idUserWhoFollows= " + idUserWhoFollows +
-                    ", idUserWhoIsFollowed= " + idUserWhoIsFollowed +
+            LOGGER.error(" FOLLOWS relationship requested with idUserWhoFollows=" + idUserWhoFollows +
+                    ", idUserWhoIsFollowed=" + idUserWhoIsFollowed +
                     " does not exist or it's already ended. ");
-            return ResponseEntity.badRequest().body("Invalid path variables");
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }

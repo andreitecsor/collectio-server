@@ -12,32 +12,32 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository repository;
-    private Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final UserRepository userRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository repository) {
-        this.repository = repository;
+        this.userRepository = repository;
     }
 
-    public List<User> get() {
-        return repository.findAll();
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
-    public List<User> getAllFollowers(Long id) {
-        return repository.findAllFollowers(id);
-    }
-
-    public List<User> getAllFollowings(Long id) {
-        return repository.findAllFollowings(id);
-    }
-
-    public Optional<User> getById(Long id) {
-        return repository.findById(id);
+    public Optional<User> getById(String uid) {
+        return userRepository.findByUid(uid);
     }
 
     public Optional<User> getByEmail(String email) {
-        return repository.findByEmail(email);
+        return userRepository.findByEmail(email);
+    }
+
+    public List<User> getAllFollowers(String uid) {
+        return userRepository.findAllFollowers(uid);
+    }
+
+    public List<User> getAllFollowings(String uid) {
+        return userRepository.findAllFollowings(uid);
     }
 
     public User create(User user) {
@@ -45,9 +45,25 @@ public class UserService {
             return null;
         }
         if (getByEmail(user.getEmail()).isPresent()) {
-            logger.error("Already existing email address");
+            LOGGER.error("Already existing email address");
             return null;
         }
-        return repository.save(user);
+        return userRepository.save(user);
+    }
+
+    public User update(String uid, User newUserDetails) {
+        if (newUserDetails == null || newUserDetails.getDisplayName() == null || newUserDetails.getEmail() == null) {
+            LOGGER.error("Invalid user to update");
+            return null;
+        }
+        Optional<User> optionalUser = getById(uid);
+        if (!optionalUser.isPresent()) {
+            LOGGER.error("There is no user to update");
+            return null;
+        }
+        User userToUpdate = optionalUser.get();
+        userToUpdate.setDisplayName(newUserDetails.getDisplayName());
+        userToUpdate.setEmail(newUserDetails.getEmail());
+        return userRepository.save(userToUpdate);
     }
 }

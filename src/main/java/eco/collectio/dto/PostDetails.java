@@ -1,4 +1,4 @@
-package eco.collectio.domain.dto;
+package eco.collectio.dto;
 
 import eco.collectio.domain.Challenge;
 import eco.collectio.domain.PostType;

@@ -9,14 +9,14 @@ import org.springframework.stereotype.Repository;
 public interface ReachRepository extends Neo4jRepository<Reach, Long> {
 
     @Query("MATCH (user:User)-[relation:REACHED]->(stage:Stage) " +
-            "WHERE id(user) = $userId AND id(stage) = $stageId " +
+            "WHERE user.uid = $userId AND id(stage) = $stageId " +
             "RETURN user,stage,relation")
-    Reach findByNodesIds(Long userId, Long stageId);
+    Reach findByNodesIds(String userId, Long stageId);
 
     @Query("MATCH (user:User)-[relation:REACHED]->(stage:Stage)<-[:HAS]-(challenge:Challenge) " +
-            "WHERE id(user)=$userId AND id(challenge)= $challengeId AND relation.show = true " +
+            "WHERE user.uid =$userId AND id(challenge)= $challengeId AND relation.show = true " +
             "SET relation.show = false " +
             "RETURN user,relation,stage")
-    Reach hideActiveBadgeFromChallenge(Long userId, Long challengeId);
+    Reach hideActiveBadgeFromChallenge(String userId, Long challengeId);
 
 }

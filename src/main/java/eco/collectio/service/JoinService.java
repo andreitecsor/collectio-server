@@ -20,7 +20,7 @@ public class JoinService {
     private final ChallengeService challengeService;
     private final ReachService reachService;
     private final PostService postService;
-    private Logger logger = LoggerFactory.getLogger(JoinService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(JoinService.class);
 
     @Autowired
     public JoinService(JoinRepository joinRepository, UserService userService, ChallengeService challengeService, ReachService reachService, PostService postService) {
@@ -35,21 +35,21 @@ public class JoinService {
         return joinRepository.findAll();
     }
 
-    public List<Join> getAllActives(Long userId) {
+    public List<Join> getAllActives(String userId) {
         return joinRepository.findAllActives(userId);
     }
 
-    public Join getByNodesIds(Long userId, Long challengeId) {
+    public Join getByNodesIds(String userId, Long challengeId) {
         return joinRepository.findByNodesIds(userId, challengeId);
     }
 
-    public Join upsert(Long userId, Long challengeId) {
+    public Join upsert(String userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null) {
             Optional<User> persistedUser = userService.getById(userId);
             Optional<Challenge> persistedChallenge = challengeService.getById(challengeId);
             if (!persistedUser.isPresent() || !persistedChallenge.isPresent()) {
-                logger.error("user(id=" + userId + ") or challenge(id=" + challengeId + ") does not exists");
+                LOGGER.error("user(id=" + userId + ") or challenge(id=" + challengeId + ") does not exists");
                 return null;
             }
             Join join = new Join(persistedUser.get(), persistedChallenge.get());
@@ -64,7 +64,7 @@ public class JoinService {
         if (joinUpdate != null) {
             return joinUpdate;
         }
-        logger.error(result.toString() + " is still active");
+        LOGGER.error(result.toString() + " is still active");
         return null;
     }
 
@@ -82,12 +82,12 @@ public class JoinService {
     }
 
     private void createChallengePost(User user, Challenge challenge) throws InvalidPostException {
-        postService.upsert(new Post.PostBuilder(PostType.CHALLENGE, user)
+        postService.create(new Post.PostBuilder(PostType.CHALLENGE, user)
                 .setChallenge(challenge)
                 .build());
     }
 
-    public Join endChallenge(Long userId, Long challengeId) {
+    public Join endChallenge(String userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             return null;
@@ -96,13 +96,14 @@ public class JoinService {
         return joinRepository.save(result);
     }
 
-    public Join checkChallengeActivity(Long userId, Long challengeId) {
+    public Join checkChallengeActivity(String userId, Long challengeId) {
         Join result = getByNodesIds(userId, challengeId);
         if (result == null || result.getEndedAt() != null) {
             return null;
         }
         int daysBetween = (int) ChronoUnit.DAYS.between(result.getLastChecked(), LocalDate.now());
         if (daysBetween < 4) {
+            LOGGER.info("User (id = " + userId + " )is still in trus period for challenge (id=  " + challengeId + ")");
             return null; //trust days period -> you cant check now
         }
         if (daysBetween < 7) {

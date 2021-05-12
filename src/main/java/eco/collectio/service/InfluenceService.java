@@ -15,7 +15,7 @@ import java.util.Optional;
 public class InfluenceService {
     private final InfluenceRepository influenceRepository;
     private final UserService userService;
-    private Logger logger = LoggerFactory.getLogger(InfluenceService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(InfluenceService.class);
 
     @Autowired
     public InfluenceService(InfluenceRepository repository, UserService userService) {
@@ -27,13 +27,13 @@ public class InfluenceService {
         return influenceRepository.findAll();
     }
 
-    public Influence upsert(Long whoInfluencedId, Long whoIsInfluencedId) {
+    public Influence upsert(String whoInfluencedId, String whoIsInfluencedId) {
         Influence result = influenceRepository.findByNodesIds(whoInfluencedId, whoIsInfluencedId);
         if (result == null) {
             Optional<User> whoInfluenced = userService.getById(whoInfluencedId);
             Optional<User> whoIsInfluenced = userService.getById(whoIsInfluencedId);
             if (!whoInfluenced.isPresent() || !whoIsInfluenced.isPresent()) {
-                logger.error("user whoInfluenced(id=" + whoInfluencedId + ") or user whoIsInfluenced(id=" + whoIsInfluencedId + ") does not exists");
+                LOGGER.error("user whoInfluenced(id=" + whoInfluencedId + ") or user whoIsInfluenced(id=" + whoIsInfluencedId + ") does not exists");
                 return null;
             }
             Influence newInfluenceRelation = new Influence(whoInfluenced.get(), whoIsInfluenced.get());

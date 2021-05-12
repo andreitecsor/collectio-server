@@ -18,7 +18,7 @@ public class ReachService {
     private final StageService stageService;
     private final UserService userService;
     private final PostService postService;
-    private Logger logger = LoggerFactory.getLogger(ReachService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ReachService.class);
 
     @Autowired
     public ReachService(ReachRepository reachRepository, StageService stageService, UserService userService, PostService postService) {
@@ -28,7 +28,7 @@ public class ReachService {
         this.postService = postService;
     }
 
-    private Reach upsert(Long userId, Long stageId) {
+    private Reach upsert(String userId, Long stageId) {
         Reach result = reachRepository.findByNodesIds(userId, stageId);
         if (result == null) {
             Optional<User> persistedUser = userService.getById(userId);
@@ -49,7 +49,7 @@ public class ReachService {
         } catch (InvalidPostException e) {
             e.printStackTrace();
         }
-        logger.error(result.toString() + " is still active");
+        LOGGER.error(result.toString() + " is still active");
         return null;
     }
 
@@ -61,7 +61,7 @@ public class ReachService {
 
     private void createAwardPost(User user, Stage stage) throws InvalidPostException {
         Challenge challenge = stageService.findChallenge(stage);
-        postService.upsert(new Post.PostBuilder(PostType.AWARD, user)
+        postService.create(new Post.PostBuilder(PostType.AWARD, user)
                 .setStage(stage)
                 .setChallenge(challenge)
                 .build());
@@ -71,22 +71,22 @@ public class ReachService {
         int currentWeeks = (int) ChronoUnit.WEEKS.between(join.getStartedAt(), join.getLastChecked());
         List<Stage> orderedStagesDesc = stageService.getAllByChallengeId(join.getChallenge().getId());
         if (orderedStagesDesc == null || orderedStagesDesc.isEmpty()) {
-            logger.error("Challenge does not have stages");
+            LOGGER.error("Challenge does not have stages");
             return null;
         }
         for (Stage stage : orderedStagesDesc) {
             if (currentWeeks == stage.getWeeksCondition()) {
                 hideActiveBadge(join);
-                return upsert(join.getUser().getId(), stage.getId());
+                return upsert(join.getUser().getUid(), stage.getId());
             }
         }
         return null;
     }
 
     private void hideActiveBadge(Join join) {
-        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getId(), join.getChallenge().getId());
+        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getUid(), join.getChallenge().getId());
         if (updatedReach != null && updatedReach.getShow()) {
-            logger.error("Reach updated fail");
+            LOGGER.error("Reach updated fail");
         }
     }
 }

@@ -18,7 +18,7 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final UserService userService;
     private final PostService postService;
-    private Logger logger = LoggerFactory.getLogger(FollowService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(FollowService.class);
 
     @Autowired
     public FollowService(FollowRepository followRepository, UserService userService, PostService postService) {
@@ -27,13 +27,14 @@ public class FollowService {
         this.postService = postService;
     }
 
-    public Follow upsert(Long idUserWhoFollows, Long idUserWhoIsFollowed) {
+    public Follow follow(String idUserWhoFollows, String idUserWhoIsFollowed) {
         Follow result = followRepository.findByNodesIds(idUserWhoFollows, idUserWhoIsFollowed);
         if (result == null) {
             Optional<User> userWhoFollows = userService.getById(idUserWhoFollows);
             Optional<User> userWhoIsFollowed = userService.getById(idUserWhoIsFollowed);
             if (!userWhoFollows.isPresent() || !userWhoIsFollowed.isPresent()) {
-                logger.error("user who follows(id=" + idUserWhoFollows + ") or user whoIsFollowed(id=" + idUserWhoIsFollowed + ") does not exists");
+                LOGGER.error("user who follows(id=" + idUserWhoFollows + ") " +
+                        "or user whoIsFollowed(id=" + idUserWhoIsFollowed + ") does not exists");
                 return null;
             }
             Follow newFollowRelation = new Follow(userWhoFollows.get(), userWhoIsFollowed.get());
@@ -42,24 +43,25 @@ public class FollowService {
                 return followRepository.save(newFollowRelation);
             } catch (InvalidPostException e) {
                 e.printStackTrace();
+                return null;
             }
         }
 
-        Follow followUpdate = followUpdate(result);
+        Follow followUpdate = followAgain(result);
         if (followUpdate != null) {
             return followUpdate;
         }
-        logger.error(result.toString() + " is still active");
+        LOGGER.error(result.toString() + " is still active");
         return null;
     }
 
     private void createFollowPost(User userWhoFollows, User userWhoIsFollowed) throws InvalidPostException {
-        postService.upsert(new Post.PostBuilder(PostType.FOLLOW, userWhoFollows)
+        postService.create(new Post.PostBuilder(PostType.FOLLOW, userWhoFollows)
                 .setFollowing(userWhoIsFollowed)
                 .build());
     }
 
-    private Follow followUpdate(Follow result) {
+    private Follow followAgain(Follow result) {
         if (result.getLastTimeUnfollowed() != null) {
             try {
                 result.followAgain();
@@ -72,20 +74,21 @@ public class FollowService {
         return null;
     }
 
-    public Follow unfollow(Long idUserWhoFollows, Long idUserWhoIsFollowed) {
-        Follow result = followRepository.findByNodesIds(idUserWhoFollows, idUserWhoIsFollowed);
+    public Follow unfollow(String idUserWhoFollows, String idUserWhoIsFollowed) {
+        Follow result = followRepository.findByNodesIds(idUserWhoFollows.trim(), idUserWhoIsFollowed.trim());
         if (result == null || result.getLastTimeUnfollowed() != null) {
-            logger.error("The specific FOLLOWS relation does not exists or it's already ended");
+            LOGGER.error("The specific FOLLOWS relation does not exists or it's already ended");
             return null;
         }
 
         Optional<Post> optionalPost = postService.getPostByFollowerIdAndFollowingId(idUserWhoFollows, idUserWhoIsFollowed);
         if (!optionalPost.isPresent()) {
+            LOGGER.error("There is no FOLLOW post associated with the relationship");
             return null;
         }
         Post followPost = optionalPost.get();
         followPost.makeUnavailable();
-        postService.upsert(followPost);
+        postService.create(followPost);
         result.unfollow();
         return followRepository.save(result);
     }
