@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> getByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public List<User> getAllFollowers(String uid) {
         return userRepository.findAllFollowers(uid);
     }
@@ -41,29 +45,40 @@ public class UserService {
     }
 
     public User create(User user) {
-        if (user == null || user.getEmail() == null || user.getDisplayName() == null) {
+        if (user == null || user.getEmail() == null) {
             return null;
         }
-        if (getByEmail(user.getEmail()).isPresent()) {
-            LOGGER.error("Already existing email address");
-            return null;
+        Optional<User> optionalUser = getById(user.getUid());
+        if (optionalUser.isPresent()
+                && optionalUser.get().getEmail().equals(user.getEmail())) {
+            return optionalUser.get();
         }
         return userRepository.save(user);
     }
 
     public User update(String uid, User newUserDetails) {
-        if (newUserDetails == null || newUserDetails.getDisplayName() == null || newUserDetails.getEmail() == null) {
+        if (newUserDetails == null || newUserDetails.getUid() == null || newUserDetails.getEmail() == null) {
             LOGGER.error("Invalid user to update");
             return null;
         }
-        Optional<User> optionalUser = getById(uid);
-        if (!optionalUser.isPresent()) {
+        Optional<User> optionalUserByUid = getById(uid);
+        if (!optionalUserByUid.isPresent()) {
             LOGGER.error("There is no user to update");
             return null;
         }
-        User userToUpdate = optionalUser.get();
-        userToUpdate.setDisplayName(newUserDetails.getDisplayName());
-        userToUpdate.setEmail(newUserDetails.getEmail());
+        User userToUpdate = optionalUserByUid.get();
+        if (newUserDetails.getUsername() != null) {
+            Optional<User> optionalUserByUsername = getByUsername(newUserDetails.getUsername());
+            if (optionalUserByUsername.isPresent()) {
+                LOGGER.error("Already an user with the same username");
+                return null;
+            }
+            userToUpdate.setUsername(newUserDetails.getUsername());
+        }
+
+        if (newUserDetails.getDisplayName() != null) {
+            userToUpdate.setDisplayName(newUserDetails.getDisplayName());
+        }
         return userRepository.save(userToUpdate);
     }
 }
