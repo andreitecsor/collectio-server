@@ -57,7 +57,7 @@ public class UserService {
     }
 
     public User update(String uid, User newUserDetails) {
-        if (newUserDetails == null || newUserDetails.getUid() == null || newUserDetails.getEmail() == null) {
+        if (newUserDetails == null || uid == null) {
             LOGGER.error("Invalid user to update");
             return null;
         }
