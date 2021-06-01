@@ -20,7 +20,7 @@ public class Stage {
 
     private Integer weeksCondition;
 
-    //private String badgeUrl;
+    private String badgeUrl;
 
     public int getWeeksCondition() {
         return weeksCondition;

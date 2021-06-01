@@ -51,7 +51,13 @@ public class ChallengeService {
             return null;
         }
         Challenge challengeToUpdate = optionalChallenge.get();
-        challengeToUpdate.setTitle(newChallengeDetails.getTitle());
+        if (newChallengeDetails.getTitle() != null) {
+            challengeToUpdate.setTitle(newChallengeDetails.getTitle());
+        }
+        if (newChallengeDetails.getLogoUrl() != null) {
+            challengeToUpdate.setTitle(newChallengeDetails.getLogoUrl());
+        }
         return challengeRepository.save(challengeToUpdate);
+
     }
 }
