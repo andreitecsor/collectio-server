@@ -19,6 +19,8 @@ public class Challenge {
     @Property(name = "title")
     private String title;
 
+    private String description;
+
     private String logoUrl;
 
     @Relationship(type = "HAS", direction = Relationship.OUTGOING)
