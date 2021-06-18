@@ -45,4 +45,13 @@ public class User implements Serializable {
         return email.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid='" + uid + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

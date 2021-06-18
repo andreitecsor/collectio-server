@@ -97,4 +97,18 @@ public class Post {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", user=" + user +
+                ", type=" + type +
+                ", createdAt=" + createdAt +
+                ", isVisible=" + isVisible +
+                ", challengeId=" + challengeId +
+                ", stageId=" + stageId +
+                ", followingId='" + followingId + '\'' +
+                '}';
+    }
 }
