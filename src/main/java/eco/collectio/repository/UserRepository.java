@@ -20,12 +20,12 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     Optional<User> findByUsername(String username);
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
-            "WHERE id(followed) = $userIdWhoIsFollowed AND NOT EXISTS(relation.lastTimeUnfollowed)" +
+            "WHERE followed.uid = $userIdWhoIsFollowed AND NOT EXISTS(relation.lastTimeUnfollowed)" +
             "RETURN follows")
     List<User> findAllFollowers(String userIdWhoIsFollowed); //People who follow the specific user
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
-            "WHERE id(follows) = $userIdWhoFollows AND NOT EXISTS(relation.lastTimeUnfollowed) " +
+            "WHERE follows.uid = $userIdWhoFollows AND NOT EXISTS(relation.lastTimeUnfollowed) " +
             "RETURN followed")
     List<User> findAllFollowings(String userIdWhoFollows); //People that the specific user is following
 }
