@@ -46,6 +46,12 @@ public class UserController {
         return result.map(user -> ResponseEntity.ok().body(user)).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getByUsername(@PathVariable String username) {
+        Optional<User> result = userService.getByUsername(username);
+        return result.map(user -> ResponseEntity.ok().body(user)).orElseGet(() -> ResponseEntity.noContent().build());
+    }
+
     @GetMapping("/{id}/followers")
     public ResponseEntity<List<User>> getFollowers(@PathVariable String id) {
         List<User> result = userService.getAllFollowers(id);
