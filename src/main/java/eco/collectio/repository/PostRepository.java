@@ -29,7 +29,7 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
 
     @Query(value = "MATCH (loggedUser:User)-[rel:GENERATES]->(posts:Post) " +
             "WHERE loggedUser.uid = $loggedUserId AND posts.isVisible = true " +
-            "RETURN posts, rel",
+            "RETURN loggedUser, posts, rel",
             countQuery = "MATCH (loggedUser:User)-[:GENERATES]->(posts:Post) " +
                     "WHERE loggedUser.uid = $loggedUserId AND posts.isVisible = true " +
                     "RETURN count(posts)")
