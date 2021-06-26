@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -92,5 +93,13 @@ public class UserService {
 
     public Integer getNoOfChallengesStartedBecauseOfUser(String id) {
         return userRepository.findNoOfChallengesStartedBecauseOfUser(id);
+    }
+
+    public Set<User> getAllByDisplayName(String displayName) {
+        return userRepository.findAllByDisplayName(displayName);
+    }
+
+    public Set<User> getAllByUsername(String username) {
+        return userRepository.findAllByUsername(username);
     }
 }

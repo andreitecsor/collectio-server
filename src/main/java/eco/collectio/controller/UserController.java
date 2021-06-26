@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -28,6 +30,31 @@ public class UserController {
     public ResponseEntity<List<User>> getAll() {
         List<User> result = userService.getAll();
         if (result == null) {
+            LOGGER.info("No users found");
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Set<User>> getAllByDisplayNameOrUsername(@RequestParam Optional<String> displayName,
+                                                                   @RequestParam Optional<String> username) {
+        Set<User> displayNameSet = null;
+        Set<User> usernameSet = null;
+        if (displayName.isPresent()) {
+            displayNameSet = userService.getAllByDisplayName(displayName.get());
+        }
+        if (username.isPresent()) {
+            usernameSet = userService.getAllByUsername(username.get());
+        }
+        Set<User> result = new HashSet<>();
+        if (displayNameSet != null) {
+            result.addAll(displayNameSet);
+        }
+        if (usernameSet != null) {
+            result.addAll(usernameSet);
+        }
+        if (result.isEmpty()) {
             LOGGER.info("No users found");
             return ResponseEntity.noContent().build();
         }

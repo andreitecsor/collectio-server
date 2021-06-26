@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends Neo4jRepository<User, String> {
@@ -18,6 +19,16 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     Optional<User> findByEmail(String email);
 
     Optional<User> findByUsername(String username);
+
+    @Query("MATCH (u:User) " +
+            "WHERE toLower(u.displayName) CONTAINS toLower($displayName) " +
+            "RETURN u")
+    Set<User> findAllByDisplayName(String displayName);
+
+    @Query("MATCH (u:User) " +
+            "WHERE toLower(u.username) CONTAINS toLower($username) " +
+            "RETURN u")
+    Set<User> findAllByUsername(String username);
 
     @Query("MATCH (follows:User)-[relation:FOLLOWS]->(followed:User) " +
             "WHERE followed.uid = $userIdWhoIsFollowed AND NOT EXISTS(relation.lastTimeUnfollowed)" +
