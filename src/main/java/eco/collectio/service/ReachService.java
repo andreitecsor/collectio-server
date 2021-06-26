@@ -28,6 +28,10 @@ public class ReachService {
         this.postService = postService;
     }
 
+    public List<Reach> getAllShownBadges(String userId) {
+        return reachRepository.findAllShownBadges(userId);
+    }
+
     private Reach upsert(String userId, Long stageId) {
         Reach result = reachRepository.findByNodesIds(userId, stageId);
         if (result == null) {

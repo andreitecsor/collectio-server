@@ -5,6 +5,8 @@ import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReachRepository extends Neo4jRepository<Reach, Long> {
 
@@ -19,4 +21,9 @@ public interface ReachRepository extends Neo4jRepository<Reach, Long> {
             "RETURN user,relation,stage")
     Reach hideActiveBadgeFromChallenge(String userId, Long challengeId);
 
+
+    @Query("MATCH (u:User)-[reached:REACHED]->(s:Stage)" +
+            "WHERE u.uid = $userId AND reached.show = true " +
+            "RETURN reached,u,s")
+    List<Reach> findAllShownBadges(String userId);
 }

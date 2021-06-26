@@ -1,6 +1,7 @@
 package eco.collectio.service;
 
 import eco.collectio.domain.*;
+import eco.collectio.dto.Achievement;
 import eco.collectio.exception.InvalidPostException;
 import eco.collectio.repository.JoinRepository;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,23 @@ public class JoinService {
 
     public Join getByNodesIds(String userId, Long challengeId) {
         return joinRepository.findByNodesIds(userId, challengeId);
+    }
+
+    public Optional<Join> getByUserAndStage(String userId, Long stageId) {
+        return joinRepository.findByUserAndStage(userId, stageId);
+    }
+
+    public List<Achievement> getAllAchievements(String userId) {
+        List<Reach> allShownBadges = reachService.getAllShownBadges(userId);
+        if (allShownBadges.isEmpty()) {
+            return null;
+        }
+        List<Achievement> achievements = new ArrayList<>();
+        for (Reach reach : allShownBadges) {
+            Optional<Join> optionalJoin = getByUserAndStage(userId, reach.getStage().getId());
+            optionalJoin.ifPresent(join -> achievements.add(new Achievement(join, reach)));
+        }
+        return achievements;
     }
 
     public Join upsert(String userId, Long challengeId) {

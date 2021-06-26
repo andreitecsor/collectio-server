@@ -2,6 +2,7 @@ package eco.collectio.controller;
 
 import eco.collectio.domain.Influence;
 import eco.collectio.domain.Join;
+import eco.collectio.dto.Achievement;
 import eco.collectio.service.InfluenceService;
 import eco.collectio.service.JoinService;
 import org.slf4j.Logger;
@@ -39,6 +40,15 @@ public class JoinController {
     @GetMapping("/actives/{userId}")
     public ResponseEntity<List<Join>> getAllActives(@PathVariable String userId) {
         List<Join> result = joinService.getAllActives(userId);
+        if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/achievements/{userId}")
+    public ResponseEntity<List<Achievement>> getAllAchievements(@PathVariable String userId) {
+        List<Achievement> result = joinService.getAllAchievements(userId);
         if (result == null) {
             return ResponseEntity.noContent().build();
         }
