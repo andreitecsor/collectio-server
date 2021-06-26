@@ -15,7 +15,7 @@ public interface PostRepository extends Neo4jRepository<Post, Long> {
 
     @Query("MATCH (post:Post)<-[:GENERATES]-(userWhoFollows:User)-[relation:FOLLOWS]->(userWhoIsFollowed:User) " +
             "WHERE userWhoFollows.uid = $idUserWhoFollows AND userWhoIsFollowed.uid = $idUserWhoIsFollowed " +
-            "AND post.isVisible = true " +
+            "AND post.isVisible = true AND post.type = 'FOLLOW' " +
             "RETURN post")
     Optional<Post> findByUserIdAndFollowingId(String idUserWhoFollows, String idUserWhoIsFollowed);
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -68,12 +69,12 @@ public class UserService {
         }
         User userToUpdate = optionalUserByUid.get();
         if (newUserDetails.getUsername() != null) {
-            Optional<User> optionalUserByUsername = getByUsername(newUserDetails.getUsername());
+            Optional<User> optionalUserByUsername = getByUsername(newUserDetails.getUsername().toLowerCase());
             if (optionalUserByUsername.isPresent()) {
                 LOGGER.error("Already an user with the same username");
                 return null;
             }
-            userToUpdate.setUsername(newUserDetails.getUsername());
+            userToUpdate.setUsername(newUserDetails.getUsername().toLowerCase());
         }
 
         if (newUserDetails.getDisplayName() != null) {
