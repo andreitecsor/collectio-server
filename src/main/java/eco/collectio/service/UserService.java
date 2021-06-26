@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -43,6 +42,10 @@ public class UserService {
 
     public List<User> getAllFollowings(String uid) {
         return userRepository.findAllFollowings(uid);
+    }
+
+    public Integer getNoOfInfluence(String id) {
+        return userRepository.findNoOfInfluencedByUserId(id);
     }
 
     public User create(User user) {
@@ -81,5 +84,13 @@ public class UserService {
             userToUpdate.setDisplayName(newUserDetails.getDisplayName());
         }
         return userRepository.save(userToUpdate);
+    }
+
+    public Integer getNoInfluenced(String id) {
+        return userRepository.findNoOfInfluencedByUserId(id);
+    }
+
+    public Integer getNoOfChallengesStartedBecauseOfUser(String id) {
+        return userRepository.findNoOfChallengesStartedBecauseOfUser(id);
     }
 }

@@ -28,4 +28,15 @@ public interface UserRepository extends Neo4jRepository<User, String> {
             "WHERE follows.uid = $userIdWhoFollows AND NOT EXISTS(relation.lastTimeUnfollowed) " +
             "RETURN followed")
     List<User> findAllFollowings(String userIdWhoFollows); //People that the specific user is following
+
+
+    @Query("MATCH(influencer:User)-[influenced:INFLUENCED]->(user:User) " +
+            "WHERE influencer.uid = $userId " +
+            "RETURN COUNT(user)")
+    Integer findNoOfInfluencedByUserId(String userId);
+
+    @Query("MATCH(influencer:User)-[influenced:INFLUENCED]->(user:User) " +
+            "WHERE influencer.uid = $userId " +
+            "RETURN SUM(influenced.timesInfluenced)")
+    Integer findNoOfChallengesStartedBecauseOfUser(String userId);
 }

@@ -70,6 +70,18 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/{id}/influenced")
+    public ResponseEntity<Integer> getNoOfInfluencedUsers(@PathVariable String id) {
+        Integer result = userService.getNoInfluenced(id);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/{id}/influenced/challenges")
+    public ResponseEntity<Integer> getNoOfChallengesStartedBecauseOfUser(@PathVariable String id) {
+        Integer result = userService.getNoOfChallengesStartedBecauseOfUser(id);
+        return ResponseEntity.ok().body(result);
+    }
+
     @PostMapping("")
     public ResponseEntity<User> add(@RequestBody User user) {
         User result = userService.create(user);
