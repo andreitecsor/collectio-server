@@ -88,7 +88,8 @@ public class ReachService {
     }
 
     private void hideActiveBadge(Join join) {
-        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getUid(), join.getChallenge().getId());
+        Reach updatedReach = reachRepository.hideActiveBadgeFromChallenge(join.getUser().getUid(),
+                join.getChallenge().getId());
         if (updatedReach != null && updatedReach.getShow()) {
             LOGGER.error("Reach updated fail");
         }
