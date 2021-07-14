@@ -1,9 +1,16 @@
 package eco.collectio.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.*;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @RelationshipEntity(type = "JOINED")
 public class Join {
     @Id
@@ -18,46 +25,21 @@ public class Join {
 
     private Integer timesTried;
 
+    private Integer bestRecord; // number of weeks
+
     @StartNode
     private User user;
 
     @EndNode
     private Challenge challenge;
 
-    public Join(LocalDate startedAt, User user, Challenge challenge, Integer timesTried) {
-        this.startedAt = startedAt;
+    public Join(User user, Challenge challenge) {
+        this.startedAt = LocalDate.now();
         this.lastChecked = this.startedAt;
         this.user = user;
         this.challenge = challenge;
-        this.timesTried = timesTried;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getStartedAt() {
-        return startedAt;
-    }
-
-    public LocalDate getEndedAt() {
-        return endedAt;
-    }
-
-    public LocalDate getLastChecked() {
-        return lastChecked;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Challenge getChallenge() {
-        return challenge;
-    }
-
-    public Integer getTimesTried() {
-        return timesTried;
+        this.timesTried = 1;
+        this.bestRecord = 0;
     }
 
     public void restartChallenge() {
@@ -71,17 +53,18 @@ public class Join {
 
     public void endChallenge() {
         this.endedAt = LocalDate.now();
+        int weeks = (int) ChronoUnit.WEEKS.between(this.startedAt, this.endedAt);
+        if (weeks > this.bestRecord) {
+            this.bestRecord = weeks;
+        }
     }
 
-    @Override
-    public String toString() {
-        return "Join{" +
-                "id=" + id +
-                ", startedAt=" + startedAt +
-                ", endedAt=" + endedAt +
-                ", lastChecked=" + lastChecked +
-                ", challenge=" + challenge +
-                '}';
+    public void checkChallenge() {
+        this.lastChecked = this.lastChecked.plusDays(7);
+        int weeks = (int) ChronoUnit.WEEKS.between(this.startedAt, this.lastChecked);
+        if (weeks > this.bestRecord) {
+            this.bestRecord = weeks;
+        }
     }
 
 

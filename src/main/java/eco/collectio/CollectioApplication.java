@@ -1,15 +1,19 @@
 package eco.collectio;
 
-import eco.collectio.repository.ChallengeRepository;
-import eco.collectio.repository.InfluenceRepository;
-import eco.collectio.repository.JoinRepository;
-import eco.collectio.repository.UserRepository;
+import eco.collectio.repository.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableNeo4jRepositories(basePackageClasses = {UserRepository.class, JoinRepository.class, ChallengeRepository.class, InfluenceRepository.class})
+@EnableNeo4jRepositories(basePackageClasses = {UserRepository.class,
+        JoinRepository.class,
+        ChallengeRepository.class,
+        InfluenceRepository.class,
+        FollowRepository.class,
+        PostRepository.class,
+        ReachRepository.class,
+        StageRepository.class})
 @SpringBootApplication
 @EnableTransactionManagement
 public class CollectioApplication {

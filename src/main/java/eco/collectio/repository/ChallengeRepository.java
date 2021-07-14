@@ -14,4 +14,6 @@ public interface ChallengeRepository extends Neo4jRepository<Challenge, Long> {
 
     @Override
     Optional<Challenge> findById(Long id);
+
+    Challenge findByTitle(String title);
 }

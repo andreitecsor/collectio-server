@@ -2,6 +2,9 @@ package eco.collectio.service;
 
 import eco.collectio.domain.Challenge;
 import eco.collectio.repository.ChallengeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,36 +12,52 @@ import java.util.Optional;
 
 @Service
 public class ChallengeService {
-    private final ChallengeRepository repository;
+    private final ChallengeRepository challengeRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(ChallengeService.class);
 
+
+    @Autowired
     public ChallengeService(ChallengeRepository repository) {
-        this.repository = repository;
+        this.challengeRepository = repository;
     }
 
-    /**
-     * @return all challenges from database
-     */
-    public List<Challenge> get() {
-        return repository.findAll();
+    public List<Challenge> getAll() {
+        return challengeRepository.findAll();
     }
 
-    /**
-     * @param id challenge's unique id
-     * @return specific user from database via id
-     */
     public Optional<Challenge> getById(Long id) {
-        return repository.findById(id);
+        return challengeRepository.findById(id);
     }
 
-    /**
-     * @param challenge's properties without id
-     * @return the new challenge added or null if: challenge is null or it's data types are incorrect
-     */
     public Challenge create(Challenge challenge) {
-        //TODO:Should check if the user already exists based on email.
-        if (challenge == null || challenge.getTitle() == null) {
+        Challenge sameTitleChallenge = challengeRepository.findByTitle(challenge.getTitle());
+        if (challenge.getTitle() == null) {
             return null;
         }
-        return repository.save(challenge);
+        if (sameTitleChallenge != null && sameTitleChallenge.equals(challenge)) {
+            return null;
+        }
+        return challengeRepository.save(challenge);
+    }
+
+    public Challenge update(Long id, Challenge newChallengeDetails) {
+        if (newChallengeDetails == null || newChallengeDetails.getTitle() == null) {
+            LOGGER.error("Invalid challenge to update");
+            return null;
+        }
+        Optional<Challenge> optionalChallenge = getById(id);
+        if (!optionalChallenge.isPresent()) {
+            LOGGER.error("There is no challenge to update");
+            return null;
+        }
+        Challenge challengeToUpdate = optionalChallenge.get();
+        if (newChallengeDetails.getTitle() != null) {
+            challengeToUpdate.setTitle(newChallengeDetails.getTitle());
+        }
+        if (newChallengeDetails.getLogoUrl() != null) {
+            challengeToUpdate.setTitle(newChallengeDetails.getLogoUrl());
+        }
+        return challengeRepository.save(challengeToUpdate);
+
     }
 }

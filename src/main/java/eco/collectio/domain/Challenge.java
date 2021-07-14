@@ -1,10 +1,15 @@
 package eco.collectio.domain;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.neo4j.ogm.annotation.*;
 
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @NodeEntity
 public class Challenge {
     @Id
@@ -14,18 +19,12 @@ public class Challenge {
     @Property(name = "title")
     private String title;
 
-    public Challenge(Long id, String title) {
-        this.id = id;
-        this.title = title;
-    }
+    private String description;
 
-    public Long getId() {
-        return id;
-    }
+    private String logoUrl;
 
-    public String getTitle() {
-        return title;
-    }
+    @Relationship(type = "HAS", direction = Relationship.OUTGOING)
+    private List<Stage> stages;
 
     @Override
     public boolean equals(Object o) {
@@ -34,19 +33,11 @@ public class Challenge {
 
         Challenge challenge = (Challenge) o;
 
-        return title != null ? title.equals(challenge.title) : challenge.title == null;
+        return title.equals(challenge.title);
     }
 
     @Override
     public int hashCode() {
-        return title != null ? title.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Challenge{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
+        return title.hashCode();
     }
 }

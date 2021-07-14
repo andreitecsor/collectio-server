@@ -1,40 +1,57 @@
 package eco.collectio.domain;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @NodeEntity
 public class User implements Serializable {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String uid;
 
-    @Property(name = "name")
-    private String name;
+    private String displayName;
 
-    public User(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    private String username;
+
+    private String email;
+
+    @JsonIgnore
+    @Relationship(type = "GENERATES", direction = Relationship.OUTGOING)
+    private List<Post> posts = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return email.equals(user.email);
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public int hashCode() {
+        return email.hashCode();
     }
-
-    public String getName() {
-        return name;
-    }
-
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "uid='" + uid + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }
