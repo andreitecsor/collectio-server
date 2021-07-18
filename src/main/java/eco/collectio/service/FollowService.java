@@ -81,14 +81,6 @@ public class FollowService {
             return null;
         }
 
-        Optional<Post> optionalPost = postService.getPostByFollowerIdAndFollowingId(idUserWhoFollows, idUserWhoIsFollowed);
-        if (!optionalPost.isPresent()) {
-            LOGGER.error("There is no FOLLOW post associated with the relationship");
-            return null;
-        }
-        Post followPost = optionalPost.get();
-        followPost.makeUnavailable();
-        postService.create(followPost);
         result.unfollow();
         return followRepository.save(result);
     }
